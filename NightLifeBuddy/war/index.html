@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Nightlife Buddy Alpha</title>
+ 
+
+<link href="http://www.gstatic.com/codesite/ph/17444577587916266307/css/ph_core.css" rel="stylesheet" type="text/css" />
+ <link href="http://code.google.com/css/codesite.pack.04102009.css" rel="stylesheet" type="text/css" />
+  <script language="javascript" src='script/jquery-1.6.min.js'></script>
+  <script language="javascript" src='script/ajax.util.js'></script>
+</head>
+
+<body>
+    
+   
+  <!-- content -->  
+  <div  id="gc-pagecontent" >
+  <h1 class="page_title">Code Lab Example 1</h1>
+  
+ <!-- tabs --> 
+ <div id="tabs" class="gtb">
+      <a id="venues" href="#venues" class="tab">Venues</a> 	   
+	  <a id="genres" href="#genres" class="tab">Genres</a> 
+	  <a id="events" href="#events" class="tab">Events</a>	   
+	  <div class="gtbc"></div>
+  </div>
+ 
+  
+   <!-- ******************************************* venues ******************************************* -->
+  <div class="g-unit" id="venues-tab">
+    <div class ="message" id="venues-show-message" style="display:none">
+  </div>
+   <!-- search container -->
+   	<div class="gsc-search-box" id="venues-search-ctr">
+   	<!-- section title -->
+   	<h2>All Venues</h2>
+   	<form name="venues-search-form" id="venues-search-form">
+	   	 <label>Name</label>
+	   	 <input type="text" name="q" id="q" class="gsc-input"/> 
+	     <input type="button" value="Search" onclick="search('venues')" class="gsc-search-button" />
+	     <input type="button" value="Add" onclick="add('venues')" class="gsc-search-button" />
+	     <input type="reset" id="venues-search-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+    </form>
+   	</div>
+   <!-- list container -->
+   	<div class="results" style="border:0;" id="venues-list-ctr">
+          <table width="100%" cellspacing="0" cellpadding="2" border="0" style="border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Address</th>                      
+              </tr>
+            </thead>
+            <tbody id="venues-list-tbody"></tbody>
+          </table>
+  	</div>
+  
+  	<!-- create container -->
+	  	<div class="create-ctr" id="venues-create-ctr">
+	  	<h2>Create Venue</h2>
+	  	<form name="venues-create-form" id="venues-create-form">
+	  	<table width="200" cellspacing="0" cellpadding="0">
+	  	<tbody>
+	  	<tr >
+		 <td>Name </td>
+          <td><span class="readonly"><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="name" id="name" /></span></td>
+		 </tr>
+		<tr>
+           <td>Description</td>
+           <td><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="description" id="description" /></td>
+         </tr>
+         <tr>
+           <td>Address</td>
+           <td><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="address" id="address" /></td>
+         </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td> 
+          <input type="button" class="save" title="Save" value="Save" onclick="formValidate('venues')" />
+          <input type="button" class="cancel" title="Cancel" value="Cancel" onclick="cancel('venues')" />
+          <input type="reset" id="venues-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+         </td>
+        </tr>
+	  	</tbody>
+  </table>
+  </form>
+  </div>
+  
+  </div>
+  
+   <!-- ******************************************* genres ******************************************* -->
+  <div class="g-unit" id="genres-tab">
+    <div class ="message" id="genres-show-message" style="display:none">
+  </div>
+   <!-- search container -->
+   	<div class="gsc-search-box" id="genres-search-ctr">
+   	<!-- section title -->
+   	<h2>All Genres</h2>
+   	<form name="genres-search-form" id="genres-search-form">
+	   	 <label>Name</label>
+	   	 <input type="text" name="q" id="q" class="gsc-input"/> 
+	     <input type="button" value="Search" onclick="search('genres')" class="gsc-search-button" />
+	     <input type="button" value="Add" onclick="add('genres')" class="gsc-search-button" />
+	     <input type="reset" id="genres-search-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+    </form>
+   	</div>
+   <!-- list container -->
+   	<div class="results" style="border:0;" id="genres-list-ctr">
+          <table width="100%" cellspacing="0" cellpadding="2" border="0" style="border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>                      
+              </tr>
+            </thead>
+            <tbody id="genres-list-tbody"></tbody>
+          </table>
+  	</div>
+  
+  	<!-- create container -->
+	  	<div class="create-ctr" id="genres-create-ctr">
+	  	<h2>Create a Genre</h2>
+	  	<form name="genres-create-form" id="genres-create-form">
+	  	<table width="200" cellspacing="0" cellpadding="0">
+	  	<tbody>
+	  	<tr >
+		 <td>Name </td>
+          <td><span class="readonly"><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="name" id="name" /></span></td>
+		 </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td> 
+          <input type="button" class="save" title="Save" value="Save" onclick="formValidate('genres')" />
+          <input type="button" class="cancel" title="Cancel" value="Cancel" onclick="cancel('genres')" />
+          <input type="reset" id="product-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+         </td>
+        </tr>
+	  	</tbody>
+  </table>
+  </form>
+  </div>
+  
+  </div>
+   <!-- ******************************************* events ******************************************* -->
+  <div class="g-unit" id="events-tab">
+    <div class ="message" id="events-show-message" style="display:none">
+  </div>
+	   <!-- search container -->
+	   	<div class="gsc-search-box" id="events-search-ctr">
+	   	<!-- section title -->
+	   	<h2>All Events</h2>
+	   	<form name="events-search-form" id="events-search-form">
+	   	   <input type="text" name="q" id="q" class="gsc-input"/> 
+	   	   <select id="by" name="events-searchby" class="gsc-input">
+              <option value="name">Event</option>
+              <option value="venue">Venue</option>
+              <option value="price">Price</option>
+            </select> 
+            <input type="button" value="Search" onclick="search('events')" class="gsc-search-button" />
+            <input type="button" value="Add" onclick="add('events')" class="gsc-search-button" />
+            <input type="reset" id="events-search-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+          </form>  
+	   	</div>
+	   <!-- list container -->
+	   	<div class="results" style="border:0;" id="events-list-ctr">
+           <table width="100%" cellspacing="0" cellpadding="2" border="0" style="border-collapse:collapse;">
+             <thead>
+               <tr>
+                 <th scope="col">Event Name</th>
+                 <th scope="col">Venue</th>
+                 <th scope="col">Price</th>                      
+               </tr>
+             </thead>
+             <tbody id="events-list-tbody"></tbody>
+           </table>
+	  	</div>
+	  	<!-- create container -->
+	  	<div class="create-ctr" id="events-create-ctr">
+	  	<h2>Create an Event</h2>
+	  	<form name="events-create-form" id="events-create-form">
+	  	<table width="200" cellspacing="0" cellpadding="0">
+           <tr> 
+           	 <td>Event Name</td>
+             <td ><span class="readonly"><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="name" id="name" /></span></td>
+           </tr>
+           <tr>
+             <td>Price</td>
+             <td><input type="text" style="width: 185px;" autocomplete="off" class="gsc-input" maxlength="2048" name="price" id="price" /></td>
+           </tr>
+           <tr>
+             <td>Venue</td>
+             <td><select id="events-venues-list" name="venues"></select></td>
+           </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td> 
+                  <input type="button" class="save" title="Save" value="Save" onclick="formValidate('events')" />
+                  <input type="button" class="cancel" title="Cancel" value="Cancel" onclick="cancel('events')" />
+                  <input type="reset" id="events-reset" class="cancel" title="Reset" value="Reset" style="visibility: hidden"/>
+              </td>
+            </tr>
+			 </table>
+			 </form>
+	  	</div>
+	  	<!-- create conatiner ends here -->
+  </div>  
+  
+ </div>
+  
+<script type="text/javascript">
+
+ $(window).load(function () {
+   init();
+});
+
+</script>
+</body>
+</html>
