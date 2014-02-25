@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,12 +44,15 @@ public class VenuesServlet extends BaseServlet {
       out.println(Util.writeJSON(entities));
     } else {
       Entity venue = Venues.getVenue(searchFor);
+      
       if (venue != null) {
         Set<Entity> result = new HashSet<Entity>();
         result.add(venue);
         out.println(Util.writeJSON(result));
       }
     }
+	RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+	rd.forward(req, resp);
   }
 
   /**
@@ -68,6 +72,8 @@ public class VenuesServlet extends BaseServlet {
       String msg = Util.getErrorMessage(e);
       out.print(msg);
     }
+    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+	rd.forward(req, resp);
   }
 
   /**
@@ -89,14 +95,24 @@ public class VenuesServlet extends BaseServlet {
    */
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
-    String action = req.getParameter("action");
-    if (action.equalsIgnoreCase("delete")) {
-      doDelete(req, resp);
-      return;
-    } else if (action.equalsIgnoreCase("put")) {
-      doPut(req, resp);
-      return;
-    }
+    
+	  
+	  
+	 logger.log(Level.INFO, "Creating Product");
+	    PrintWriter out = resp.getWriter();
+
+	    String category = req.getParameter("name");
+	    String description = req.getParameter("description");
+	    String address = req.getParameter("address");
+	    try {
+	      Venues.createOrUpdateVenues(category, description, address);
+	    } catch (Exception e) {
+	      String msg = Util.getErrorMessage(e);
+	      out.print(msg);
+	    }
+	    RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+		rd.forward(req, resp);
+    
   }
 
 }

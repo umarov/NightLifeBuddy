@@ -43,7 +43,7 @@ public class EventsServlet extends BaseServlet
 	    } else if (searchBy == null || searchBy.equals("name")) {
 	      Iterable<Entity> entities = Events.getEvent(searchFor);
 	      out.println(Util.writeJSON(entities));
-	    } else if (searchBy != null && searchBy.equals("product")) {
+	    } else if (searchBy != null && searchBy.equals("venue")) {
 	      Iterable<Entity> entities = Events.getItemsForVenue("Events", searchFor);
 	      out.println(Util.writeJSON(entities));
 	    }

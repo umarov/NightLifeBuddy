@@ -1,6 +1,7 @@
 var HOME='home';
-var ENTITY_PRODUCT='product';
-var ENTITY_ITEM='item';
+var ENTITY_VENUE='venues';
+var ENTITY_GENRE='genres';
+var ENTITY_EVENTS='events';
 
 //function to initialize the page
 var init = function() {
@@ -65,11 +66,11 @@ var add = function(entity) {
 	//display the create container
 	showHideCreate(entity, true);
 	$("span.readonly input").attr('readonly', false);
-	$("select[id$=item-product-list] > option").remove();
+	$("select[id$=events-venues-list] > option").remove();
 	//checking the entity to populate the select box
-	if (entity == ENTITY_ITEM) {
+	if (entity == ENTITY_EVENT) {
 		//populating the product and contact by making an ajax call
-		populateSelectBox('item-product-list', '/product');
+		populateSelectBox('events-venues-list', '/venues');
 	}
 }
 
@@ -96,12 +97,16 @@ var formValidate = function(entity){
 	var formEleList = $('form#'+entity+'-create-form').serializeArray();
 	key=formEleList[0].value;
 	switch(entity){
-		case ENTITY_ITEM:
-			var valueProduct = $('#item-product-list').val();
-			if(valueProduct == "" || key == ""){
-				showMessage('please check the key and Product values in the form', entity);
+		case ENTITY_EVENTS:
+			var valueVenues = $('#events-venues-list').val();
+			if(valueVenues == "" || key == ""){
+				showMessage('please check the key and Venue values in the form', entity);
 				return;
 			}
+			break;
+		case ENTITY_VENUES:
+			var valueVenues = $('#events-venues-list').val();
+			return;
 			break;
 		default :
 			if(key==""){
@@ -136,7 +141,7 @@ var save = function(entity) {
 			}
 		});
 	 $('#'+entity+'-reset').click();
-	 $('#item-product-list').reset();//='';
+	 $('#events-venues-list').reset();//='';
 }
 
 //function to edit entity
@@ -153,8 +158,8 @@ var edit = function(entity, id){
 			for(var i=0;i<formElements.length;i++){
 				if(formElements[i].type !="button"){
 					var ele=$(formElements[i]);
-					if(ele.attr('name')=="product"){						
-						$("select[id$=item-product-list] > option").remove();
+					if(ele.attr('name')=="venues"){						
+						$("select[id$=events-venues-list] > option").remove();
 						ele.append('<option value="'+eval('data.'+ele.attr('name'))+'">'+eval('data.'+ele.attr('name'))+'</option>');	
 					}
 					else
@@ -256,21 +261,27 @@ var populateList=function(entity, filter){
 			for (var i=0;i<data.length;i++){
 				//creating a row
 				htm+='<tr>';
-				switch(entity)
-				{
-				case ENTITY_PRODUCT:
-					htm+='<td>'+data[i].name+'</td><td>'+data[i].description+'</td>';
-					break;
-				case ENTITY_ITEM:
-					htm+='<td>'+data[i].name+'</td><td>'+data[i].price+'</td><td>'+data[i].product+'</td>';
-					break;
-				default:
-					htm+=""; 
-				}
-				if(entity == ENTITY_ITEM)
-					htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'","'+data[i].product+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
-				else
-					htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
+				//switch(entity)
+				//{
+				//case ENTITY_VENUE:
+				htm+='<td>'+data[i].name+'</td><td>'+data[i].description+'</td><td>'+data[i].address+'</td>';
+				//	break;
+					
+				//case ENTITY_GENRE:
+				//	htm+='<td>'+data[i].name+'</td>';
+				//	break;	
+					
+				//case ENTITY_EVENTS:
+				//	htm+='<td>'+data[i].name+'</td><td>'+data[i].price+'</td><td>'+data[i].venue+'</td>';
+				//	break;
+				
+				//default:
+				//	htm+=""; 
+				//}
+				//if(entity == ENTITY_EVENTS)
+				//	htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'","'+data[i].venues+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
+				//else
+				//	htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
 			}
 		}
 		else{

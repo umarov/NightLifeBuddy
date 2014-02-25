@@ -1,0 +1,1 @@
+PrimeFaces.widget.Message=PrimeFaces.widget.BaseWidget.extend({init:function(a){this._super(a);var b=this.jq.children(".ui-message-error-detail").text();if(b){$(PrimeFaces.escapeClientId(this.cfg.target)).data("tooltip",b)}}});

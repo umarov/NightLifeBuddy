@@ -59,7 +59,7 @@ public class Venues
 	   * @return list of items
 	   */
 	  
-	  @SuppressWarnings("deprecation")
+	
 	public static List<Entity> getEvents(String name) {
 	  	Query query = new Query();
 	  	Key parentKey = KeyFactory.createKey("Venue", name);
