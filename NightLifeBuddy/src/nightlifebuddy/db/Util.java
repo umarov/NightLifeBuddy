@@ -144,7 +144,7 @@ public static Iterable<Entity> listEntities(String kind, String searchBy,
 	 * List the entities in JSON format
 	 * 
 	 * @param entities  entities to return as JSON strings
-	 */
+	
   public static String writeJSON(Iterable<Entity> entities) {
     logger.log(Level.INFO, "creating JSON format object");
   	StringBuilder sb = new StringBuilder();
@@ -172,6 +172,48 @@ public static Iterable<Entity> listEntities(String kind, String searchBy,
   	sb.append("]}");
   	return sb.toString();
   }
+  */ 
+  
+  public static String writeResults(Iterable<Entity> entities) {
+	    logger.log(Level.INFO, "creating search results");
+	  	StringBuilder sb = new StringBuilder();
+	  	
+	  	
+	  	sb.append("<div class=\"results\" style=\"border:0;\" id=\"venues-list-ctr\">" +
+	  			"<table width=\"100%\" cellspacing=\"0\" cellpadding=\"2\" border=\"0\" style=\"border-collapse:collapse;\">" +
+            "<thead>"+
+              "<tr>"+
+                "<th scope=\"col\">Name</th>"+
+                "<th scope=\"col\">Description</th>"+
+                "<th scope=\"col\">Address</th>  "      +              
+              "</tr>"+
+            "</thead>"+
+            "<tbody id=\"venues-list-tbody\">");
+            
+  	
+	  	int i = 0;
+	  	sb.append("<tr>");
+	  	for (Entity result : entities) {
+	  	  Map<String, Object> properties = result.getProperties();
+	  	  sb.append("");
+	  	  if (result.getKey().getName() != null)
+	  		
+	  		sb.append("<td>" + result.getKey().getName() + "</td>");
+	  
+	  	  for (String key : properties.keySet()) {
+	  		sb.append("<td>" + properties.get(key) + "</td>");
+	  	  }
+	  	  
+	  	  sb.append("");
+	  	  i++;
+	  	}
+	  	 
+	  	sb.append("</tr>");
+	  	sb.append("</tbody>"+
+          "</table></div>");
+	  	return sb.toString();
+	  }
+	  
   
   /**
 	 * Retrieves Parent and Child entities into JSON String
@@ -183,7 +225,7 @@ public static Iterable<Entity> listEntities(String kind, String searchBy,
 	 * @param fkName
 	 *            : foreign-key to the parent in the child entity
 	 * @return JSON string
-	 */
+	
   public static String writeJSON(Iterable<Entity> entities, String childKind, String fkName) {
   	logger.log(Level.INFO, "creating JSON format object for parent child relation");
   	StringBuilder sb = new StringBuilder();
@@ -216,7 +258,8 @@ public static Iterable<Entity> listEntities(String kind, String searchBy,
   	sb.append("]}");
   	return sb.toString();
   }
- 
+  
+  */
   
 	/**
 	 * Utility method to send the error back to UI

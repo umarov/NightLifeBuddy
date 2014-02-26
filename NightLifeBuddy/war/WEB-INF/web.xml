@@ -4,22 +4,7 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<servlet>
-		<servlet-name>EventsServlet</servlet-name>
-		<servlet-class>nightlifebuddy.servlet.EventsServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>EventsServlet</servlet-name>
-		<url-pattern>/events</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>GenresServlet</servlet-name>
-		<servlet-class>nightlifebuddy.servlet.GenresServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>GenresServlet</servlet-name>
-		<url-pattern>/genres</url-pattern>
-	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>VenuesServlet</servlet-name>
 		<servlet-class>nightlifebuddy.servlet.VenuesServlet</servlet-class>

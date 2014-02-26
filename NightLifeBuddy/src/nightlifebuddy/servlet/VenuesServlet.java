@@ -41,17 +41,17 @@ public class VenuesServlet extends BaseServlet {
     Iterable<Entity> entities = null;
     if (searchFor == null || searchFor.equals("") || searchFor == "*") {
       entities = Venues.getAllVenues("Venue");
-      out.println(Util.writeJSON(entities));
+      out.println(Util.writeResults(entities));
     } else {
       Entity venue = Venues.getVenue(searchFor);
       
       if (venue != null) {
         Set<Entity> result = new HashSet<Entity>();
         result.add(venue);
-        out.println(Util.writeJSON(result));
+        out.println(Util.writeResults(result));
       }
     }
-	RequestDispatcher rd = getServletContext().getRequestDispatcher("/index.html");
+	RequestDispatcher rd = getServletContext().getRequestDispatcher("/results.html");
 	rd.forward(req, resp);
   }
 

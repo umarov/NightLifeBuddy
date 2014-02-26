@@ -85,6 +85,7 @@ var search = function(entity) {
 		 filterParam[filterParam.length]=new param(formEleList[i].name,formEleList[i].value); 
 	 }
 	 //calling population of the list through ajax
+	 //populateSelectBox('venues-list-ctr', '/index.html');
 	 populateList(entity,filterParam);
 }
 
@@ -248,13 +249,14 @@ var populateSelectBox = function(id, url) {
 //function to populate the list of an entity
 var populateList=function(entity, filter){
 	//specifying the success function. When the ajax response is successful then the following function will be called
-
+	
 	var successFn=function(resp){
 		var data='';
 		if(resp){
 			//getting the data from the response object
 			data=resp.data;
 		}
+		
 		//creating the html content
 		var htm='';
 		if(data.length > 0){
@@ -264,7 +266,7 @@ var populateList=function(entity, filter){
 				//switch(entity)
 				//{
 				//case ENTITY_VENUE:
-				htm+='<td>'+data[i].name+'</td><td>'+data[i].description+'</td><td>'+data[i].address+'</td>';
+				htm+='<td>'+data[i].name+'</td><td>'+data[i].description+'</td><td>'+data[i].address+'</td></tr>';
 				//	break;
 					
 				//case ENTITY_GENRE:
@@ -281,7 +283,7 @@ var populateList=function(entity, filter){
 				//if(entity == ENTITY_EVENTS)
 				//	htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'","'+data[i].venues+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
 				//else
-				//	htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
+				//htm+='<td><a href="#" class="delete-entity" onclick=\'deleteEntity("'+entity+'","'+data[i].name+'")\'>Delete</a> | <a href="#" class="edit-entity" onclick=\'edit("'+entity+'","'+data[i].name+'")\'>Edit</a></td></tr>';
 			}
 		}
 		else{
@@ -290,6 +292,7 @@ var populateList=function(entity, filter){
 			htm+='<tr><td colspan="'+thElesLength+'">No items found</td></tr>';
 		}
 		$('#'+entity+'-list-tbody').html(htm);
+		
 	}
-	getData("/"+entity,filter,successFn,null);
+	getData("/venues",filter,successFn,null);
 }
