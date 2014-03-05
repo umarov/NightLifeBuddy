@@ -1,0 +1,125 @@
+@CHARSET "ISO-8859-1";
+
+/*  
+   Copyright 2013 - 
+   Licensed under the Academic Free License version 3.0
+   http://opensource.org/licenses/AFL-3.0
+
+   Authors: Alexander Leone, Andrew Tsai, Mihai Boicu, ... 
+   
+   Version 0.1 - Fall 2013
+*/
+.menu {
+	width: 690px;
+	padding: 0px;
+	margin: 0px;
+	background-color: #E9FFE9;
+	color: #006600;
+	text-align: left;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.menu_item {
+	display: inline;
+	margin-right: 5px;
+	padding: 5px;
+	background-color: #CCFFCC;
+	color: #006600;
+	text-align: left;
+}
+
+.big_map_canvas {
+	width: 696px;
+	height: 400px;
+	background-color: #CCC;
+}
+
+.edit_map_canvas {
+	width: 530px;
+	height: 400px;
+	background-color: #CCC;
+}
+
+.edit_lot_map_canvas, .edit_building_map_canvas {
+	width: 540px;
+	height: 400px;
+	background-color: #CCC;
+}
+
+#main {
+	width: 700px;
+	margin: 0px;
+	margin-bottom: 3px;
+}
+
+#edit {
+	width: 585px;
+	margin: 0px;
+}
+
+.editText,.editVenueNameInput{
+	width: 465px;
+	height: 20px;
+}
+
+.error {
+	color: red;
+	font-style: italic;
+}
+
+form {
+	display: inline;
+}
+
+table,th,td,tfoot {
+	border: 1px solid #006600;
+	border-collapse: collapse;
+	text-align: left;
+	padding: 2px;
+}
+
+th {
+	color: #E9FFE9;
+	background-color: #003300;
+}
+
+.editTable {
+	border: none;
+}
+
+td {
+	color: #006600;
+	background-color: white;
+}
+
+.footer {
+	color: #006600;
+	background-color: #CCFFCC;
+}
+
+a:link {
+	color: #006600;
+} /* unvisited link */
+a:visited {
+	color: #006600;
+} /* visited link */
+a:hover {
+	color: #339933;
+} /* mouse over link */
+a:active {
+	color: #006600;
+} /* selected link */
+
+/* ADMIN PARKING SPOT */
+
+
+.backBtn {
+	display: block;
+	position: relative;
+	float: right;
+	padding: 2px;
+	border: black solid 3px;
+	background-color: white;
+	color: green;
+}

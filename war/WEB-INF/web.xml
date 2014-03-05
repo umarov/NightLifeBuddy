@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+ <display-name>
+    Nightlife Buddy
+   </display-name>
+   <description>
+    An easy-to-use app that helps you plan your nightlife in Washington DC.
+   </description>
+   <!-- ***** Designate client-side state saving. *****  -->
+   <context-param>
+      <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+      <param-value>client</param-value>
+   </context-param>
+   <!-- Set the default suffix for JSF pages to .xhtml -->
+   <context-param>
+      <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+      <param-value>.xhtml</param-value>
+   </context-param>
+   <!-- Disable use of threading for single-threaded environments such as
+        the Google AppEngine. -->
+   <context-param>
+      <param-name>com.sun.faces.enableThreading</param-name>
+      <param-value>false</param-value>
+      <description>
+         When enabled, the runtime initialization and default ResourceHandler 
+         implementation will use threads to perform their functions. Set this 
+         value to false if threads aren't desired (as in the case of running 
+         within the Google Application Engine).
+   
+         Note that when this option is disabled, the ResourceHandler will not 
+         pick up new versions of resources when ProjectStage is development.
+      </description>
+   </context-param>
+   <!-- ***** Specify JBoss Expression Language Over Default -->
+   <context-param>     
+      <param-name>com.sun.faces.expressionFactory</param-name>
+      <param-value>org.jboss.el.ExpressionFactoryImpl</param-value>   
+   </context-param> 
+   <!-- ***** Load the JavaServer Faces Servlet ***** -->
+   <servlet>
+      <servlet-name>Faces Servlet</servlet-name>
+      <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>Faces Servlet</servlet-name>
+      <url-pattern>/faces/*</url-pattern>
+      <url-pattern>*.jsf</url-pattern>
+   </servlet-mapping>
+	<!--  **** /End Java Faceshot stuff **** -->
+   <servlet>
+		<servlet-name>AddVenueServlet</servlet-name>
+		<servlet-class>nightlifebuddy.AddVenueServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddVenueServlet</servlet-name>
+		<url-pattern>/admin/addVenueCommand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>DeleteVenueServlet</servlet-name>
+		<servlet-class>nightlifebuddy.DeleteVenueServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteVenueServlet</servlet-name>
+		<url-pattern>/admin/deleteVenueCommand</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>UpdateVenueServlet</servlet-name>
+		<servlet-class>nightlifebuddy.UpdateVenueServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateVenueServlet</servlet-name>
+		<url-pattern>/admin/updateVenueCommand</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <servlet-class>nightlifebuddy.SearchGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <url-pattern>/admin/seachGenreCommand</url-pattern>	    
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AddGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.AddGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddGenreServlet</servlet-name>
+		<url-pattern>/admin/addGenreCommand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>DeleteGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.DeleteGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteGenreServlet</servlet-name>
+		<url-pattern>/admin/deleteGenreCommand</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>UpdateGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.UpdateGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateGenreServlet</servlet-name>
+		<url-pattern>/admin/updateGenreCommand</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <servlet-class>nightlifebuddy.SearchGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <url-pattern>/admin/seachGenreCommand</url-pattern>	    
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddEventServlet</servlet-name>
+		<servlet-class>nightlifebuddy.AddEventServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddEventServlet</servlet-name>
+		<url-pattern>/admin/addEventCommand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>DeleteEventServlet</servlet-name>
+		<servlet-class>nightlifebuddy.DeleteEventServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteEventServlet</servlet-name>
+		<url-pattern>/admin/deleteEventCommand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>UpdateEventServlet</servlet-name>
+		<servlet-class>nightlifebuddy.UpdateEventServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateEventServlet</servlet-name>
+		<url-pattern>/admin/updateEventCommand</url-pattern>
+	</servlet-mapping>
+	<servlet>
+	    <servlet-name>SearchEventServlet</servlet-name>
+	    <servlet-class>nightlifebuddy.SearchEventServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>SearchEventServlet</servlet-name>
+	    <url-pattern>/admin/seachEventCommand</url-pattern>	    
+	</servlet-mapping>
+   <!-- ***** Specify session timeout of thirty (30) minutes. ***** -->
+   <session-config>
+      <session-timeout>30</session-timeout>
+   </session-config>
+   <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+      <welcome-file>index.xhtml</welcome-file>
+      <welcome-file>index.html</welcome-file>
+   </welcome-file-list>
+</web-app>
