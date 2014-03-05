@@ -71,7 +71,7 @@
   <div id="header">
 	<div class="container">
 		<div class="row">
-			<h1>NightLife Buddy</h1>
+			<h1><a href="index.jsp">NightLife Buddy</a></h1>
 			<div class="sixteen columns">
 			     <ul class="nav">
 			     	<li><a href="/admin/allVenues.jsp"><i class="fa fa-building-o"></i></a></li>
@@ -83,7 +83,7 @@
 	  	</div>
 	 </div>
   </div>
-   <div class="container">
+   <div id="content" class="container">
     
     
         <%!List<Entity> results = null; %>
@@ -93,29 +93,35 @@
         if (results == null)
         {
       %>
+      		<div class="row">
+		       <div class="sixteen columns">
+		         <h2 class="searchTitle">Start the night off right. Searching by Venue:</h2>
+		       </div>
+		     </div>
 		    <div class="row">
-		      <div class="five columns right">
-		        <p>Start the night off right. Search for places: </p>
-		      </div>
-		      <div class="eleven columns">
+		      <div class="eleven columns offset-by-five">
 		        <form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
 		          <input id="searchVenueInput" type="text" name="search" size="100" />
 		          <input id="searchVenueButton" type="submit" value="search" />
 		        </form> 
 		      </div>
 		     </div>
+		     
+		     
       <%
         }
         else
         {
           %>
 	         <div class="row">
-			    <div class="five columns right">
-			      <p>Start the night off right. Search for places: </p>
-			    </div>
-			    <div class="eleven columns">
-			      <form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">        
-			        <input id="searchVenueInput" type="text" name="search" size="100" />
+		       <div class="sixteen columns">
+		         <h2 class="searchTitle">Start the night off right. Searching by Venue:</h2>
+		       </div>
+		     </div>
+		    <div class="row">
+		      <div class="eleven columns offset-by-five">
+		        <form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
+		          <input id="searchVenueInput" type="text" name="search" size="100" />
 			        <input id="searchVenueButton" type="submit" onclick="showdiv('searchDiv')" value="search" />
 			      </form> 
 			    </div>
@@ -141,7 +147,6 @@
           </tr>
           </div>
           <div class="row">
-          
           <tr>
             <th class="searchResults"><%=number%></th>
             <th class="searchResults"><%=venueName%></th>
@@ -159,7 +164,6 @@
       %>
       
       </div>
-    </div>
     
   </body>
 </html>
