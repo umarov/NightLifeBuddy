@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.appengine.api.datastore.BaseDatastoreService;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -29,7 +28,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
  * AUTHORS: Muzafar Umarov <br>
  */
 
-public class Venues 
+public class Venues
 {
 
 	//
@@ -49,7 +48,7 @@ public class Venues
 	/**
 	 * The list for the results that will be used in the index page
 	 */
-	private static List<Entity> result = null;
+	private static List<Entity> result;
 	
 	//
 	// KIND
@@ -258,7 +257,6 @@ public class Venues
         Entity venue = null;
         try {
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-                long id = Long.parseLong(name);
                 Key venueKey = KeyFactory.createKey(ENTITY_KIND, name);
                 venue = datastore.get(venueKey);
         } catch (Exception e) {
@@ -360,7 +358,7 @@ public class Venues
      */
 	public static void searchVenueCommand(String search) 
 	{
-		
+		result = null;
         try {
                 
                 Filter hasSearch = new FilterPredicate(NAME_PROPERTY,

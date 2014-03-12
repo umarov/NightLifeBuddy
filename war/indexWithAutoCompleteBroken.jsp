@@ -32,6 +32,26 @@
 	    _hidediv = function () { div.style.display = 'none'; };
 	}
 	</script>
+	<%List<Entity> allVenues = Venues.getFirstVenues(20);%>
+	<script>
+  $(function() {
+    var availableTags = 
+    	[
+		<%for (Entity venue : allVenues) 
+		{
+			String venueName = Venues.getName(venue);%>
+			"<%=venueName%>",
+		<%}%>
+    	];
+    $( "#tags" ).autocomplete({
+      	source: availableTags
+      	window.location = '/admin/SearchVenueServlet?search=' + encodeURIComponent(seach);
+   		document.formname.key.value = key;
+    	document.formname.submit();
+    });
+    
+  });
+  </script>
   </head>
 
   <body>
@@ -46,7 +66,14 @@
         <td><a href="/admin/allEvents.jsp">All Events</a></td>
       </tr>
       </table>
-   
+      
+      
+	<div class="ui-widget">
+	<form name=searchVenue2>
+  		<label for="tags">Venues: </label>
+  		<input id="tags" value="search">
+  	</form>
+	</div>
       	<%!List<Entity> results = null; %>
       	
       <%	

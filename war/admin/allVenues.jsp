@@ -155,8 +155,11 @@ function cancelEditVenue(venueName) {
 		List<Entity> allVenues = Venues.getFirstVenues(20);
 		if (allVenues.isEmpty()) {
 	%>
-	<h1>No Venue Defined</h1>
+	<h1>No Event Defined</h1>
 	<div class="menu">
+		<div class="menu_item">
+			<a href="/index.jsp">Home</a>
+		</div>
 		<div class="menu_item">
 			<a href="/admin/allVenues.jsp">Venues</a>
 		</div>
@@ -170,8 +173,11 @@ function cancelEditVenue(venueName) {
 	<%
 		} else {
 	%>
-	<h1>All Venues</h1>
+	<h1>All Events</h1>
 	<div class="menu">
+		<div class="menu_item">
+			<a href="/index.jsp">Home</a>
+		</div>
 		<div class="menu_item">
 			<a href="/admin/allVenues.jsp">Venues</a>
 		</div>
