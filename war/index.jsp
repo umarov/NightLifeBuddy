@@ -3,49 +3,49 @@
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%@page import="com.google.appengine.api.datastore.Key, com.google.appengine.api.datastore.KeyFactory" %>
+ 
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Nightlife Buddy</title>
-	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-  	<script src="//code.jquery.com/jquery-1.9.1.js"></script>
-  	<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-		
-	<script>
-	var _hidediv = null;
-	$(document).ready(function(){
-		if(_hidediv)
-	        _hidediv();
-		var div = document.getElementById('searchDiv');
-	    div.style.display = 'none';
-	    _hidediv = function () { div.style.display = 'none'; };
-	}
-	
-	
-	function showdiv(id) {
-	    if(_hidediv)
-	        _hidediv();
-	    var div = document.getElementById(id);
-	    div.style.display = 'block';
-	    _hidediv = function () { div.style.display = 'none'; };
-	}
-	</script>
+<!--  
+   Copyright 2013 - 
+   Licensed under the Academic Free License version 3.0
+   http://opensource.org/licenses/AFL-3.0
+
+   Authors: Muzafar Umarov, Jason Pierce, Alfredo Loris
+   
+   Version 2 - Spring 2014
+-->
+
+	<!-- Basic Page Needs
+  ================================================== -->
+
+	<title>Nightlife Buddy</title>
+	<meta name="author" content="Muzafar Umarov, Jason Pierce, Alfredo Loris">
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
+  <link rel="stylesheet" href="stylesheets/base.css">
+  <link rel="stylesheet" href="stylesheets/skeleton.css">
+  <link rel="stylesheet" href="stylesheets/layout.css">
+  <link rel="stylesheet" href="stylesheets/custom.css">
+  <link rel="stylesheet" href="stylesheets/font-awesome.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  
+  <!-- SCRIPTS -->
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script src="js/jquery.videoBG.js"></script>
+
   </head>
 
   <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="/admin/allVenues.jsp">All Venues</a></td>
-        <td><a href="/admin/allEvents.jsp">All Events</a></td>
-      </tr>
-      </table>
+	<%@include file="header.jsp" %>
    
       	<%!List<Entity> results = null; %>
       	
@@ -54,33 +54,43 @@
       	if (results == null)
       	{
       %>
-      	<p>Hello, feel free to search for a venue. </p>
-      	<form name="searchVenue" action="/admin/seachVenueCommand" method="get">
-      	
-      		<input id="searchVenueInput" type="text" name="search" size="100" />
-      		<input id="searchVenueButton" type="submit" value="search" />
-      	
-      	</form>	
+      	<div class="row">
+		   <div class="sixteen columns">
+		      <h2 class="searchTitle">Start the night off right. Searching by Venue:</h2>
+		   </div>
+		</div>
+		<div class="row">
+		   <div class="eleven columns offset-by-five">
+		      	<form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
+		      		<input id="searchVenueInput" type="text" name="search" size="100" />
+				    <input id="searchVenueButton" type="submit" value="search" />
+				</form> 
+		   </div>
+		 </div>	
+		 <div id="searchDiv">
       <%
       	}
       	else
       	{
       		%>
-      		<p>Hello, feel free to search for a venue.</p>
       		
-      		<form name="searchVenue" action="/admin/seachVenueCommand" method="get">      	
-      			<input id="searchVenueInput" type="text" name="search" size="100" />
-      			<input id="searchVenueButton" type="submit" onclick="showdiv('searchDiv')" value="search" />
-      		</form>
-      		<div id="searchDiv" >
-      		<table>
+      	<div class="row">
+		   <div class="sixteen columns">
+		      <h2 class="searchTitle">Start the night off right. Searching by Venue:</h2>
+		   </div>
+		</div>
+		<div class="row no-margin">
+		   <div class="eleven columns offset-by-five">
+		      	<form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
+		      		<input id="searchVenueInput" type="text" name="search" size="100" />
+      				<input id="searchVenueButton" type="submit" onclick="showdiv('searchDiv')" value="search" />
+      			</form>
+      		</div>
+      	</div>
+      	<div id="searchDiv">
+	      	
       		
-      		<tr>
-      			<th>#</th>
-      			<th>Name</th>
-      			<th>Description</th>
-      			<th>Address</th>
-      		</tr>
+      		
       		
       		<%
       		int number = 0;
@@ -91,20 +101,22 @@
 				String venueAddress = Venues.getAddress(venue);
 				number++;
 			%>
-      	
+			
+      		<div class="row">
+      			<div class="results">
+	      			<div class="seven columns">
+	      				<h4><a href="/venues/profile.jsp?venueName=<%=venueName%>"><%=venueName%></a></h4>
+	      				<p>
+	      					<%=venueDescription%>
+	      				</p>
+	      				<span class="address">
+	      					<%=venueAddress%>
+	      				</span>
+	      			</div>
+      			</div>
+      		</div>
       		
-       		
-      		<tr>
-      		
-      			<th class="searchResults"><%=number%></th>
-      			<th class="searchResults"><%=venueName%></th>
-      			<th class="searchResults"><%=venueDescription%></th>
-      			<th class="searchResults"><%=venueAddress%></th>
-      		
-      		</tr>
-      	
-      	</table>	
-      	</div>
+      			
       <%
       
       	}
@@ -113,6 +125,7 @@
       	}
       %>
       
-    
+      </div><!-- end #searchDiv -->
+    <%@include file="footer.jsp" %>
   </body>
 </html>

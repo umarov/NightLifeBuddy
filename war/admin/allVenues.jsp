@@ -19,7 +19,7 @@
 
 <title>All Venues</title>
 <!-- CSS -->
-<link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
 
 
 <script>
@@ -34,21 +34,14 @@ $(document).ready(function(){ //test
 	// keypress event for Add button
 	$("#addVenueInput").keyup(function() {
 	venueName=$("#addVenueInput").val();
-	if (checkVenueName(venueName)) {
-		$("#addVenueButton").attr("disabled",null);
-		$("#addVenueError").hide();
-	} else {
-		$("#addVenueButton").attr("disabled","disabled");
-		if (venueName!=null && venueName.length>0) 
-			$("#addVenueError").show();
-	}
+	$("#addVenueButton").attr("disabled",null);
+	$("#addVenueError").hide();
 	});
 	
 	$(".editVenueNameInput").keyup(function() {
 		if (selectedVenueForEdit==null)
 			return;
 		venueName=$("#editVenueNameInput"+selectedVenueForEdit).val();
-		editNameError = ! checkVenueName(venueName);
 		updateSaveEditButton();
 		});
 	
@@ -57,28 +50,11 @@ $(document).ready(function(){ //test
 
 
 function updateSaveEditButton() {
-	if (editNameError||editDescriptionError||editAddressError) {
-		$("#saveEditVenueButton"+selectedVenueForEdit).attr("disabled","disabled", "disabled");
-	} else {
-		$("#saveEditVenueButton"+selectedVenueForEdit).attr("disabled",null);
-	}
-	if (editNameError) {
-		$("#editVenueNameError"+selectedVenueForEdit).show();
-	} else {
-		$("#editVenueNameError"+selectedVenueForEdit).hide();
-	}
+	$("#saveEditVenueButton"+selectedVenueForEdit).attr("disabled","disabled", "disabled");
+	$("#editVenueNameError"+selectedVenueForEdit).show();
 	
 }
 
-
-
-var venueNamePattern = /^[ \w-'',]{3,100}$/
-venueNamePattern.compile(venueNamePattern)
-
-// check the syntax of the name of a venue 
-function checkVenueName(venueName) {
-	return venueNamePattern.test(venueName);
-}
 
 
 function disableAllButtons(value) {

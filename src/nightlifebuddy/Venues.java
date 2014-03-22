@@ -67,8 +67,7 @@ public class Venues
      */
 	public static Key getKey(String name) 
 	{
-        long id = Long.parseLong(name);
-        Key venueKey = KeyFactory.createKey(ENTITY_KIND, id);
+        Key venueKey = KeyFactory.createKey(ENTITY_KIND, name);
         return venueKey;
 	}
 	
@@ -208,7 +207,7 @@ public class Venues
      * @param name The name of the venue as a String.
      * @return A GAE {@link Entity} for the venue or <code>null</code> if none or error.
      */
-	private static Entity getVenueWithName(String name) 
+	public static Entity getVenueWithName(String name) 
 	{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         return getVenueWithName(datastore, name);
@@ -220,14 +219,12 @@ public class Venues
      * @param name The name of the venue as a String.
      * @return A GAE {@link Entity} for the Venue or <code>null</code> if none or error.
      */
-	private static Entity getVenueWithName(DatastoreService datastore,
+	public static Entity getVenueWithName(DatastoreService datastore,
 			String name) 
 	{
 		Entity venue = null;
-        try {
-                
-                Filter hasName =
-                                  new FilterPredicate(NAME_PROPERTY,
+        try {                
+                Filter hasName = new FilterPredicate(NAME_PROPERTY,
                                                       FilterOperator.EQUAL,
                                                       name);
                 Query query = new Query(ENTITY_KIND);
@@ -252,13 +249,12 @@ public class Venues
      * @param name A {@link String} containing the name (a <code>long</code> number)
      * @return A GAE {@link Entity} for the Venue or <code>null</code> if none or error.
      */
-	public static Entity getVenue(String name) 
+	public static Entity getVenue(Key key) 
 	{
         Entity venue = null;
         try {
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-                Key venueKey = KeyFactory.createKey(ENTITY_KIND, name);
-                venue = datastore.get(venueKey);
+                venue = datastore.get(key);
         } catch (Exception e) {
                 // TODO log the error
         }
@@ -280,7 +276,7 @@ public class Venues
 	{
         Entity venue = null;
         try {
-        		venue = getVenue(name);
+        		venue = getVenue(getKey(name));
         		venue.setProperty(NAME_PROPERTY, name);
         		venue.setProperty(DESCRIPTION_PROPERTY, description);
         		venue.setProperty(ADDRESS_PROPERTY, address);
