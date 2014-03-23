@@ -4,6 +4,38 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+
+    <!--  GAE ADMIN FILTER: ADMIN LOGIN -->
+    
+    <filter>
+		<filter-name>adminlogin</filter-name>
+		<filter-class>nightlifebuddy.AdminLoginFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>adminlogin</filter-name>
+		<url-pattern>/admin/*</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+	    <servlet-name>adminlogout</servlet-name>
+	    <servlet-class>nightlifebuddy.LogoutServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>adminlogout</servlet-name>
+	    <url-pattern>/admin/logout</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddAdminProfileServlet</servlet-name>
+		<servlet-class>nightlifebuddy.AddAdminProfileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddAdminProfileServlet</servlet-name>
+		<url-pattern>/admin/addAdminProfileServlet</url-pattern>
+	</servlet-mapping>
+	    
 	
     <servlet>
 		<servlet-name>AddEventServlet</servlet-name>

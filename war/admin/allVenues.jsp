@@ -132,38 +132,50 @@ function cancelEditVenue(venueName) {
 		if (allVenues.isEmpty()) {
 	%>
 	<h1>No Event Defined</h1>
-	<div class="menu">
-		<div class="menu_item">
-			<a href="/index.jsp">Home</a>
+	<div class="menu" align="center">
+			<div class="menu_item">
+				<a href="/index.jsp">Home</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/adminHome.jsp">Admin Home</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allVenues.jsp">Venues</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allGenres.jsp">Genres</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allEvents.jsp">Events</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/logout">Log Out</a>
+			</div>
 		</div>
-		<div class="menu_item">
-			<a href="/admin/allVenues.jsp">Venues</a>
-		</div>
-		<div class="menu_item">
-			<a href="/admin/allGenres.jsp">Genres</a>
-		</div>
-		<div class="menu_item">
-			<a href="/admin/allEvents.jsp">Events</a>
-		</div>
-	</div>
 	<%
 		} else {
 	%>
 	<h1>All Events</h1>
-	<div class="menu">
-		<div class="menu_item">
-			<a href="/index.jsp">Home</a>
+	<div class="menu" align="center">
+			<div class="menu_item">
+				<a href="/index.jsp">Home</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/adminHome.jsp">Admin Home</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allVenues.jsp">Venues</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allGenres.jsp">Genres</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/allEvents.jsp">Events</a>
+			</div>
+			<div class="menu_item">
+				<a href="/admin/logout">Log Out</a>
+			</div>
 		</div>
-		<div class="menu_item">
-			<a href="/admin/allVenues.jsp">Venues</a>
-		</div>
-		<div class="menu_item">
-			<a href="/admin/allGenres.jsp">Genres</a>
-		</div>
-		<div class="menu_item">
-			<a href="/admin/allEvents.jsp">Events</a>
-		</div>
-	</div>
 
 	<table id="main">
 		<tr>
