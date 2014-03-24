@@ -61,7 +61,7 @@
 		</div>
 		<div class="row">
 		   <div class="eleven columns offset-by-five">
-		      	<form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
+		      	<form class="mainSearch left" name="searchVenue" action="/seachVenueCommand" method="get">
 		      		<input id="searchVenueInput" type="text" name="search" size="100" />
 				    <input id="searchVenueButton" type="submit" value="search" />
 				</form> 
@@ -81,7 +81,7 @@
 		</div>
 		<div class="row no-margin">
 		   <div class="eleven columns offset-by-five">
-		      	<form class="mainSearch left" name="searchVenue" action="/admin/seachVenueCommand" method="get">
+		      	<form class="mainSearch left" name="searchVenue" action="/seachVenueCommand" method="get">
 		      		<input id="searchVenueInput" type="text" name="search" size="100" />
       				<input id="searchVenueButton" type="submit" onclick="showdiv('searchDiv')" value="search" />
       			</form>

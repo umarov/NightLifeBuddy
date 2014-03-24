@@ -226,7 +226,7 @@ function cancelEditEvent(eventName) {
 
 				<div id="edit<%=eventName%>" style="display: none">
 
-					<form id="form<%=eventName%>" action="/admin/updateEventCommand" method="get">
+					<form id="form<%=eventName%>" action="/updateEventCommand" method="get">
 						<input type="hidden" value="<%=eventName%>" name="eventName" />
 						
 						
@@ -278,7 +278,7 @@ function cancelEditEvent(eventName) {
 		<tfoot>
 			<tr>
 				<td colspan="2" class="footer">
-					<form name="addEventForm" action="/admin/addEventCommand" method="get">
+					<form name="addEventForm" action="/addEventCommand" method="get">
 						<p>New Event:</p>
 						Name: <input id="addEventInput" type="text" name="eventName" size="50" /><br>
 						Description: <input id="addEventInput" type="text" name="eventDescription" size="50" /><br>

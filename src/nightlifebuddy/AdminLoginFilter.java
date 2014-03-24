@@ -19,6 +19,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -42,13 +43,23 @@ public class AdminLoginFilter implements Filter {
     	//check if it is in a current session with the client
     	if (!MySession.isAdminLogged(request)) {
     		if (response instanceof HttpServletResponse) {
+    			UserService userService = UserServiceFactory.getUserService();
     			String location = null;
+    			User user = userService.getCurrentUser();
     			if (request instanceof HttpServletRequest) {
-    				location = ((HttpServletRequest) request).getRequestURL().toString();
+    				try{
+        				if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) == null)
+        					location = "/createAdminProfile.jsp";
+        				else
+        					location = "/admin/adminHome.jsp";
+    				} catch(NullPointerException e)
+    				{
+    					location = "/createAdminProfile.jsp";
+    				}
     			} else {
     				location = "/admin/adminHome.jsp";
     			}
-    			UserService userService = UserServiceFactory.getUserService();
+    			
     			String address = userService.createLoginURL(location);
     			((HttpServletResponse)response).sendRedirect(address);
     		}

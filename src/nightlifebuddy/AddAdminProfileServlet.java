@@ -9,7 +9,6 @@
 package nightlifebuddy;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.http.*;
 import javax.servlet.ServletException;
@@ -27,8 +26,6 @@ import nightlifebuddy.AdminProfile;
 public class AddAdminProfileServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter out = resp.getWriter();
-		out.println("<font color=red>It worked</font>");
 		String loginID = req.getParameter("loginID");
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");

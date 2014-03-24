@@ -203,7 +203,7 @@ function cancelEditVenue(venueName) {
 
 				<div id="edit<%=venueName%>" style="display: none">
 
-					<form id="form<%=venueName%>" action="/admin/updateVenueCommand" method="get">
+					<form id="form<%=venueName%>" action="/updateVenueCommand" method="get">
 						<input type="hidden" value="<%=venueName%>" name="venueName" />
 						
 						
@@ -255,7 +255,7 @@ function cancelEditVenue(venueName) {
 		<tfoot>
 			<tr>
 				<td colspan="2" class="footer">
-					<form name="addVenueForm" action="/admin/addVenueCommand" method="get">
+					<form name="addVenueForm" action="/addVenueCommand" method="get">
 						<p>New Venue:</p>
 						Name: <input id="addVenueInput" type="text" name="venueName" size="50" /><br>
 						Description: <input id="addVenueInput" type="text" name="venueDescription" size="50" /><br>

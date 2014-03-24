@@ -18,6 +18,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</filter-mapping>
 	
 	<servlet>
+	    <servlet-name>admin</servlet-name>
+	    <jsp-file>/admin/adminHome.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>admin</servlet-name>
+	    <url-pattern>/admin</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 	    <servlet-name>adminlogout</servlet-name>
 	    <servlet-class>nightlifebuddy.LogoutServlet</servlet-class>
 	</servlet>
@@ -33,7 +42,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AddAdminProfileServlet</servlet-name>
-		<url-pattern>/admin/addAdminProfileServlet</url-pattern>
+		<url-pattern>/addAdminProfileServlet</url-pattern>
 	</servlet-mapping>
 	    
 	
@@ -43,7 +52,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AddEventServlet</servlet-name>
-		<url-pattern>/admin/addEventCommand</url-pattern>
+		<url-pattern>/addEventCommand</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -52,7 +61,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteEventServlet</servlet-name>
-		<url-pattern>/admin/deleteEventCommand</url-pattern>
+		<url-pattern>/deleteEventCommand</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -61,7 +70,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UpdateEventServlet</servlet-name>
-		<url-pattern>/admin/updateEventCommand</url-pattern>
+		<url-pattern>/updateEventCommand</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -70,7 +79,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 	    <servlet-name>SearchEventServlet</servlet-name>
-	    <url-pattern>/admin/seachEventCommand</url-pattern>	    
+	    <url-pattern>/seachEventCommand</url-pattern>	    
 	</servlet-mapping>
     
 	<servlet>
@@ -79,7 +88,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AddVenueServlet</servlet-name>
-		<url-pattern>/admin/addVenueCommand</url-pattern>
+		<url-pattern>/addVenueCommand</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -88,7 +97,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>DeleteVenueServlet</servlet-name>
-		<url-pattern>/admin/deleteVenueCommand</url-pattern>
+		<url-pattern>/deleteVenueCommand</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -97,7 +106,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>UpdateVenueServlet</servlet-name>
-		<url-pattern>/admin/updateVenueCommand</url-pattern>
+		<url-pattern>/updateVenueCommand</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -106,7 +115,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 	    <servlet-name>SearchVenueServlet</servlet-name>
-	    <url-pattern>/admin/seachVenueCommand</url-pattern>	    
+	    <url-pattern>/seachVenueCommand</url-pattern>	    
 	</servlet-mapping>
 	
 	<welcome-file-list>
