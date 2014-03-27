@@ -238,6 +238,31 @@ public class AdminProfile {
 		}
 		return adminProfile;
 	}
+	
+	public static Entity getAdminProfileWithEmail(String email) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		return getAdminProfileWithLoginID(datastore, email);
+	}
+	
+	public static Entity getAdminProfileWithEmail(DatastoreService datastore, String email) {
+		Entity adminProfile = null;
+		try {
+
+			Filter hasEmail =
+					  new FilterPredicate(LOGIN_ID_PROPERTY,
+					                      FilterOperator.EQUAL,
+					                      email);
+			Query query = new Query(ENTITY_KIND);
+			query.setFilter(hasEmail);
+			List<Entity> result = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(10));
+			if (result!=null && result.size()>0) {
+				adminProfile=result.get(0);
+			}
+		} catch (Exception e) {
+			// TODO log the error
+		}
+		return adminProfile;
+	}
 
 	//
 	// UPDATE ADMIN PROFILE

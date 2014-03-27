@@ -172,7 +172,7 @@ function cancelEditEvent(eventName) {
 				<a href="/admin/allEvents.jsp">Events</a>
 			</div>
 			<div class="menu_item">
-				<a href="/admin/logout">Log Out</a>
+				<a href="/logout">Log Out</a>
 			</div>
 		</div>
 	<%

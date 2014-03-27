@@ -33,7 +33,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
 	<servlet-mapping>
 	    <servlet-name>adminlogout</servlet-name>
-	    <url-pattern>/admin/logout</url-pattern>
+	    <url-pattern>/logout</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>

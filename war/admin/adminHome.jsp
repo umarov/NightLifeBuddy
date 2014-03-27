@@ -62,17 +62,21 @@
 				<a href="/admin/allEvents.jsp">Events</a>
 			</div>
 			<div class="menu_item">
-				<a href="/admin/logout">Log Out</a>
+				<a href="/logout">Log Out</a>
 			</div>
 		</div>
 		
 		<%
-		Entity admin = AdminProfile.getAdminProfileWithLoginID(user.getUserId());
-		if (admin == null) 
+		//Entity admin = AdminProfile.getAdminProfileWithLoginID(user.getUserId());
+		Entity admin = null;
+		if (user!=null) {
+			admin = AdminProfile.getAdminProfileWithLoginID(user.getUserId());
+		}
+		if (admin == null&&user!=null) 
 		{
 			%>
 			<p>Looks like you don't have a profile yet</p>
-			<form id="createAdminProfile" action="/admin/addAdminProfileServlet" method="get">
+			<form id="createAdminProfile" action="/addAdminProfileServlet" method="get">
 				<input type="text" id="createAdminProfileInput" name="loginID" value="<%=user.getUserId()%>"> <br/>
 				Name: <input type="text" id="createAdmingProfileInput" name="name"> <br/>
 				Email: <input type="text" id="createAdminProfileInput" name="email" value="<%=user.getEmail() %>"> <br/>
@@ -81,7 +85,7 @@
 			</form>
 			
 			<%
-		} else
+		} else if (admin!=null) 
 		{
 		%>
 		

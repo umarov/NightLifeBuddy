@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+import javax.servlet.http.HttpSession;
+
 import nightlifebuddy.AdminProfile;
 
 /**
@@ -26,10 +28,11 @@ import nightlifebuddy.AdminProfile;
 public class AddAdminProfileServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = ((HttpServletRequest) req).getSession(false);
 		String loginID = req.getParameter("loginID");
 		String name = req.getParameter("name");
 		String email = req.getParameter("email");
-		AdminProfile.createAdminProfile(loginID, name, email);
+		MySession.setAdminProfile(session, AdminProfile.createAdminProfile(loginID, name, email));
 		
 		resp.sendRedirect("/admin/adminHome.jsp");
 	}

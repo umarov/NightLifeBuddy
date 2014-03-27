@@ -33,6 +33,7 @@ public class AdminLoginFilter implements Filter {
 	 * The filter configuration.
 	 */
     private FilterConfig filterConfig;
+    
 
     /**
      * Process the filter request. If an admin is not logged redirect the request to the login page.
@@ -44,23 +45,30 @@ public class AdminLoginFilter implements Filter {
     	if (!MySession.isAdminLogged(request)) {
     		if (response instanceof HttpServletResponse) {
     			UserService userService = UserServiceFactory.getUserService();
-    			String location = null;
     			User user = userService.getCurrentUser();
-    			if (request instanceof HttpServletRequest) {
-    				try{
-        				if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) == null)
-        					location = "/createAdminProfile.jsp";
-        				else
-        					location = "/admin/adminHome.jsp";
-    				} catch(NullPointerException e)
-    				{
-    					location = "/createAdminProfile.jsp";
-    				}
-    			} else {
-    				location = "/admin/adminHome.jsp";
-    			}
+    			String location = null;
     			
+    	        if (request instanceof HttpServletRequest) {
+    	        	if (user != null)
+    	        		if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) != null)
+    	        			location = ((HttpServletRequest) request).getRequestURL().toString();
+    	        		else
+    	        			location = "/createAdminProfile.jsp";
+    	        	else
+    	        		location = "/createAdminProfile.jsp";
+            	} else {
+            		if (user != null)
+    	        		if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) != null)
+    	        			location = ((HttpServletRequest) request).getRequestURL().toString();
+    	        		else
+    	        			location = "/createAdminProfile.jsp";
+            		else
+    	        		location = "/createAdminProfile.jsp";
+            	}
+    	        
+    				
     			String address = userService.createLoginURL(location);
+    			
     			((HttpServletResponse)response).sendRedirect(address);
     		}
     		

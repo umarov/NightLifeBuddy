@@ -1,5 +1,6 @@
 package nightlifebuddy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -238,6 +239,11 @@ public class Venues
         }
         return venue;
 	}
+	
+	//ArrayList of all the event Key's in this venue
+	
+	public static ArrayList<Key> events;
+	
 	
 	//
     // GET A VENUE
