@@ -115,7 +115,9 @@ public class Genres
         Matcher matcher=NAME_PATTERN.matcher(name);
         return matcher.find();
     }
-
+    
+    
+    
 	//
     // CREATE A GENRE
     //

@@ -48,26 +48,29 @@ public class AdminLoginFilter implements Filter {
     			User user = userService.getCurrentUser();
     			String location = null;
     			
+    			String address = null; 
+    			location = ((HttpServletRequest) request).getRequestURL().toString();
+    			
     	        if (request instanceof HttpServletRequest) {
     	        	if (user != null)
     	        		if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) != null)
     	        			location = ((HttpServletRequest) request).getRequestURL().toString();
     	        		else
-    	        			location = "/createAdminProfile.jsp";
+    	        			location = "/you_shall_not_pass.jsp";
     	        	else
-    	        		location = "/createAdminProfile.jsp";
+    	        		((HttpServletResponse) response).sendRedirect(userService.createLoginURL(((HttpServletRequest) request).getRequestURI()));
             	} else {
             		if (user != null)
     	        		if (AdminProfile.getAdminProfileWithLoginID(user.getUserId()) != null)
     	        			location = ((HttpServletRequest) request).getRequestURL().toString();
     	        		else
-    	        			location = "/createAdminProfile.jsp";
-            		else
-    	        		location = "/createAdminProfile.jsp";
+    	        			location = "/you_shall_not_pass.jsp";
+            		else 
+            			((HttpServletResponse) response).sendRedirect(userService.createLoginURL(((HttpServletRequest) request).getRequestURI()));
             	}
     	        
     				
-    			String address = userService.createLoginURL(location);
+    	        address = userService.createLoginURL(location);
     			
     			((HttpServletResponse)response).sendRedirect(address);
     		}

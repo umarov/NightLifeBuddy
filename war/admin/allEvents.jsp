@@ -1,8 +1,9 @@
 <%@page import="com.google.appengine.api.datastore.Entity"%>
-<%@page import="nightlifebuddy.Events"%>
+<%@page import="nightlifebuddy.Events, nightlifebuddy.Venues"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@page import="com.google.appengine.api.datastore.Key, com.google.appengine.api.datastore.KeyFactory" %>
 
 <!--  
    Copyright 2013 - 
@@ -20,131 +21,24 @@
 <title>All Events</title>
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
 
 <script>
+<%List<Entity> venues = Venues.getFirstVenues(20);%>
 
-var selectedEventForEdit = null  
-var editNameError = false;
-var editDescriptionError = false;
-var editAddressError = false;
-
-$(document).ready(function(){ //test
-	
-	// keypress event for Add button
-	$("#addEventInput").keyup(function() {
-	eventName=$("#addEventInput").val();
-	if (checkEventName(eventName)) {
-		$("#addEventButton").attr("disabled",null);
-		$("#addEventError").hide();
-	} else {
-		$("#addEventButton").attr("disabled","disabled");
-		if (eventName!=null && eventName.length>0) 
-			$("#addEventError").show();
-	}
-	});
-	
-	$(".editEventNameInput").keyup(function() {
-		if (selectedEventForEdit==null)
-			return;
-		eventName=$("#editEventNameInput"+selectedEventForEdit).val();
-		editNameError = ! checkEventName(eventName);
-		updateSaveEditButton();
-		});
-	
-});
-
-
-
-function updateSaveEditButton() {
-	if (editNameError||editDescriptionError||editAddressError) {
-		$("#saveEditEventButton"+selectedEventForEdit).attr("disabled","disabled", "disabled");
-	} else {
-		$("#saveEditEventButton"+selectedEventForEdit).attr("disabled",null);
-	}
-	if (editNameError) {
-		$("#editEventNameError"+selectedEventForEdit).show();
-	} else {
-		$("#editEventNameError"+selectedEventForEdit).hide();
-	}
-	
-}
-
-
-
-var eventNamePattern = /^[ \w-'',]{3,100}$/
-eventNamePattern.compile(eventNamePattern)
-
-// check the syntax of the name of a venue 
-function checkEventName(eventName) {
-	return eventNamePattern.test(eventName);
-}
-
-
-function disableAllButtons(value) {
-	$(".deletebutton").attr("disabled", (value)?"disabled":null);
-	$(".editbutton").attr("disabled", (value)?"disabled":null);
-	if (value)
-		$("#addEventButton").attr("disabled", (value)?"disabled":null);
-}
-
-function deleteButton(eventName) {
-	disableAllButtons(true);
-	$("#delete"+eventName).show();
-}
-
-var selectedEventForDelete=null;
-
-function confirmDeleteEvent(eventName) {
-	selectedEventForDelete=eventName;
-	$.post("admin/deleteEventCommand", 
-			{eventName: eventName}, 
-			function (data,status) {
-				//alert("Data "+data+" status "+status);
-			
-				cancelDeleteEvent(selectedEventForDelete);
-				selectedEvent=null;
-				
-			}
-			
-	);
-	
-}
-
-function cancelDeleteEvent(eventName) {
-	$("#delete"+eventName).hide();
-	disableAllButtons(false);
-}
-
-var selectedEventOldName=null;
-var selectedEventOldAddress=null;
-var selectedEventOldDescription=null;
-
-function editButton(eventName, eventDescription, eventAddress) {
-	selectedEventForEdit=eventName;
-	disableAllButtons(true);
-	editNameError = false;
-	editDescriptionError = false;
-	editAddressError = false;
-	updateSaveEditButton();
-	selectedEventOldName=$("#editEventNameInput"+selectedEventForEdit).val();
-	selectedEVentOldAddress=null;
-	selectedEventOldDescription=null;	
-	$("#view"+eventName).hide();
-	$("#edit"+eventName).show();
-}
-
-
-function saveEditEvent(eventName) {
-	document.forms["form"+eventName].submit();
-}
-
-function cancelEditEvent(eventName) {
-	$("#editEventNameInput"+eventName).val(selectedEventOldName);
-	$("#edit"+eventName).hide();
-	$("#view"+eventName).show();
-	disableAllButtons(false);
-}
+$(function() {
+	var availableTags;
+	<%for (Entity venue : venues)
+	{%>
+	availableTags = availableTags.concat(<%=Venues.getName(venue)%>, ",");
+	<%}%>
+    $( "#addEventInputVenue" ).autocomplete({
+      source: availableTags
+    });
+  });
 
 </script>
 
@@ -206,13 +100,15 @@ function cancelEditEvent(eventName) {
 			<th>Event Name</th>
 			<th>Description</th>
 			<th>Address</th>
-			<th>View</th>
+			<th>Venue</th>
 		</tr>
 		<%
+			Key venueKey;
 			for (Entity event : allEvents) {
 					String eventName = Events.getName(event);
 					String eventDescription = Events.getDescription(event);
 					String eventAddress = Events.getAddress(event);
+					venueKey = (Key) Events.getVenueKey(event);
 		%>
 
 		<tr>
@@ -240,14 +136,15 @@ function cancelEditEvent(eventName) {
 							</tr>
 							<tr>
 								<td class="editTable">Description:</td>
-								<td class="editTable"><input type="text" class="editText" value="<%=Events.getDescription(event)%>"
+								<td class="editTable"><input type="text" class="editText" value="<%=eventDescription%>"
 										name="eventDescription" /></td>
 							</tr>
 							<tr>
 								<td class="editTable">Address:</td>
-								<td class="editTable"><input type="text" class="editText" value="<%=Events.getAddress(event)%>"
+								<td class="editTable"><input type="text" class="editText" value="<%=eventAddress%>"
 										name="eventAddress" /></td>
 							</tr>
+							
 							
 						</table>
 						
@@ -265,6 +162,7 @@ function cancelEditEvent(eventName) {
 				</div></td>
 				<td><div id="view<%=eventDescription%>"><%=eventDescription%></div></td>
 			<td><div id="view<%=eventAddress%>"><%=eventAddress%></div></td>
+			<td><div id="view<%=venueKey%>"><%=venueKey%></div></td>
 				
 				
 		</tr>
@@ -274,6 +172,7 @@ function cancelEditEvent(eventName) {
 
 			}
 		%>
+		</table>
 
 		<tfoot>
 			<tr>
@@ -283,6 +182,7 @@ function cancelEditEvent(eventName) {
 						Name: <input id="addEventInput" type="text" name="eventName" size="50" /><br>
 						Description: <input id="addEventInput" type="text" name="eventDescription" size="50" /><br>
 						Address: <input id="addEventInput" type="text" name="eventAddress" size="50" /><br>
+						Venues: <input id="addEventInputVenue" type="text" name="venueName"/><br>
 						<input id="addEventButton" type="submit" value="Add" />
 					</form>
 					<div id="addEventError" class="error" style="display: none">Invalid event name (minimum 3 characters:
@@ -291,7 +191,7 @@ function cancelEditEvent(eventName) {
 			</tr>
 		</tfoot>
 
-	</table>
+	
 
 </body>
 </html>

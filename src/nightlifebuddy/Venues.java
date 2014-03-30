@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.appengine.api.datastore.BaseDatastoreService;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -185,11 +186,13 @@ public class Venues
                 if (venue!=null) {
                         return null;
                 }
-                
+                List<Key> allEvents = new ArrayList<Key>();
+        	
                 venue = new Entity(ENTITY_KIND);
                 venue.setProperty(NAME_PROPERTY, name);
                 venue.setProperty(DESCRIPTION_PROPERTY, description);
                 venue.setProperty(ADDRESS_PROPERTY, address);
+                venue.setProperty("events", allEvents);
                 datastore.put(venue);
 
             txn.commit();
@@ -242,7 +245,50 @@ public class Venues
 	
 	//ArrayList of all the event Key's in this venue
 	
-	public static ArrayList<Key> events;
+	public static final String EVENTS_PROPERTY = "events";
+	
+	/**
+     * Add a whole array list to 
+     * @param datastore The current datastore instance. 
+     * @param name The name of the venue as a String.
+     * @return A GAE {@link Entity} for the Venue or <code>null</code> if none or error.
+     */
+	
+	public static List<Key> addEventKeys(Entity venue, List<Key> keys)
+	{
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		List<Key> allEvents = new ArrayList<Key>();
+		for(Key key : keys)
+		{
+			allEvents.add(key);
+		}
+		venue.setProperty("events", allEvents);
+		
+		datastore.put(venue);
+		return allEvents;
+	}
+	
+	/**
+     * Add the key of the event to the venue. 
+     * @param venue The venue instance where an event being hosted on. 
+     * @param key The key of the event which is being hosted on this venue.
+     * @return return list of all the events in this venue.
+     */
+	
+	public static List<Key> addEventKey(Entity venue, Key key)
+	{
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		@SuppressWarnings("unchecked")
+		List<Key> allEvents = (List<Key>) (venue.getProperty(EVENTS_PROPERTY));
+		
+		allEvents.add(key);
+		venue.setProperty("events", allEvents);
+		
+		datastore.put(venue);
+		return allEvents;
+	}
+	
+	
 	
 	
 	//
@@ -328,6 +374,25 @@ public class Venues
             Query query = new Query(ENTITY_KIND);
             List<Entity> result = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
             return result;
+    }
+    
+    /**
+     * Get a venue based on a key.
+     * @param key The key of the venue that's being searched on. 
+     * @return A GAE {@link Entity} for the Venue or <code>null</code> if none or error.
+     */
+    
+    public static Entity getVenueByKey(Key key)
+    {
+    	Entity venue = null;
+    	Filter hasVenue = new FilterPredicate(NAME_PROPERTY,
+                FilterOperator.EQUAL,
+                key);
+    	Query query = new Query(ENTITY_KIND);
+    	query.setFilter(hasVenue);
+    	BaseDatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		venue = datastore .prepare(query).asSingleEntity();
+		return venue;
     }
     
     

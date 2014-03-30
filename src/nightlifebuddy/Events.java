@@ -15,6 +15,7 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.TransactionOptions;
 
 /**
  * GAE ENTITY UTIL CLASS: "Events" <br>
@@ -67,8 +68,7 @@ public class Events
      */
 	public static Key getKey(String name) 
 	{
-        long id = Long.parseLong(name);
-        Key eventKey = KeyFactory.createKey(ENTITY_KIND, id);
+        Key eventKey = KeyFactory.createKey(ENTITY_KIND, name);
         return eventKey;
 	}
 	
@@ -164,6 +164,14 @@ public class Events
 	}
 	
 	//
+    // Venue of the event
+    //
+
+    public static final String VENUE_PROPERTY = "venue";
+    
+    
+	
+	//
     // CREATE A VENUE
     //
 
@@ -174,11 +182,15 @@ public class Events
      * @param address The address for this event.
      * @return the Entity created with this name or null if error
      */
-	public static Entity createEvent(String name, String description, String address) 
+	public static Entity createEvent(String name, String description, String address, String venueName) 
 	{
         Entity event = null;
+        Entity venue = null;
+        
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Transaction txn = datastore.beginTransaction();
+        TransactionOptions options = TransactionOptions.Builder.withXG(true);
+        Transaction txn = datastore.beginTransaction(options);
+        
         try {
         
                 event = getEventWithName(name);
@@ -187,12 +199,15 @@ public class Events
                 }
                 
                 event = new Entity(ENTITY_KIND);
+                venue = Venues.getVenueWithName(venueName);
                 event.setProperty(NAME_PROPERTY, name);
                 event.setProperty(DESCRIPTION_PROPERTY, description);
                 event.setProperty(ADDRESS_PROPERTY, address);
-                datastore.put(event);
-
-            txn.commit();
+                event.setProperty(VENUE_PROPERTY, Venues.getKey(Venues.getName(venue)));
+                
+                datastore.put(event);           
+                txn.commit();
+                //Venues.addEventKey(venue, event.getKey()); This causes a nullpointer. I am commenting out. To use it, but uncomment it. 
         } finally {
             if (txn.isActive()) {
                 txn.rollback();
@@ -201,7 +216,16 @@ public class Events
         
         return event;
 	}
+	
+	//
+	// GET VENUE KEY
+	//
 
+	public static Key getVenueKey(Entity event)
+	{
+		Key venueKey =  (Key) event.getProperty(VENUE_PROPERTY);
+		return venueKey;
+	}
 	
 	/**
      * Get an event based on a string containing its venueName.

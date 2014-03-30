@@ -41,6 +41,22 @@
   <script src="//code.jquery.com/jquery-1.9.1.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/jquery.videoBG.js"></script>
+  <script>
+<%List<Entity> venues = Venues.getFirstVenues(20);%>
+
+$(function() {
+	var availableTags;
+	<%for (Entity venue : venues)
+	{%>
+		availableTags.concat(<%=Venues.getName(venue)%>, ",");
+	<%}%>
+	availableTags.concat("Fur",",", "Tarboush");
+    $( "#searchVenueInput" ).autocomplete({
+      source: availableTags
+    });
+  });
+
+</script>
 
   </head>
 
