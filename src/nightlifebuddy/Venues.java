@@ -192,7 +192,7 @@ public class Venues
                 venue.setProperty(NAME_PROPERTY, name);
                 venue.setProperty(DESCRIPTION_PROPERTY, description);
                 venue.setProperty(ADDRESS_PROPERTY, address);
-                venue.setProperty("events", allEvents);
+                venue.setUnindexedProperty("events", allEvents);
                 datastore.put(venue);
 
             txn.commit();

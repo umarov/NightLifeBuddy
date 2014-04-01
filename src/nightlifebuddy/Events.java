@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.appengine.api.datastore.BaseDatastoreService;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -11,10 +12,10 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
 
 /**
@@ -203,11 +204,11 @@ public class Events
                 event.setProperty(NAME_PROPERTY, name);
                 event.setProperty(DESCRIPTION_PROPERTY, description);
                 event.setProperty(ADDRESS_PROPERTY, address);
-                event.setProperty(VENUE_PROPERTY, Venues.getKey(Venues.getName(venue)));
+                event.setProperty(VENUE_PROPERTY, venue.getKey());
                 
                 datastore.put(event);           
                 txn.commit();
-                //Venues.addEventKey(venue, event.getKey()); This causes a nullpointer. I am commenting out. To use it, but uncomment it. 
+                //Venues.addEventKey(venue, event.getKey()); //This causes a nullpointer. I am commenting out. To use it, but uncomment it. 
         } finally {
             if (txn.isActive()) {
                 txn.rollback();
@@ -378,11 +379,35 @@ public class Events
      * The query result is send to the local List variable result by 
      * using the setResults(List<Entity) method.
      * @param search A String of the search query (e.g. "Lima", "Darna"). 
+     * @return 
      * @return nothing. 
      */
-	public static void searchEventsCommand(String search) 
+	public static List<Entity> searchVenues(Key search) 
 	{
+		List<Entity> result = null;
+        try {
+                
+                Filter hasSearch = new FilterPredicate(VENUE_PROPERTY,
+                                                      FilterOperator.EQUAL,
+                                                      search);
+                Query query = new Query(ENTITY_KIND);
+                query.setFilter(hasSearch);
+                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                result = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(30));
+                
+                
+                
+        } catch (Exception e) {
+                // TODO log the error
+        }
+        return result;
 		
+	}
+
+
+	public static void searchEventsCommand(String search)
+	{
+		result = null;
         try {
                 
                 Filter hasSearch = new FilterPredicate(NAME_PROPERTY,
@@ -399,6 +424,5 @@ public class Events
         
 		
 	}
-	
 	
 }

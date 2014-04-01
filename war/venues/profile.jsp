@@ -1,6 +1,6 @@
 <%@page import="com.google.appengine.api.datastore.Entity"%>
 <%@page import="com.google.appengine.api.datastore.Key, com.google.appengine.api.datastore.KeyFactory" %>
-<%@page import="nightlifebuddy.Venues"%>
+<%@page import="nightlifebuddy.Venues, nightlifebuddy.Events"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -21,8 +21,10 @@
 //Key key = KeyFactory.stringToKey(request.getParameter("id"));
 String name = request.getParameter("venueName");
 Entity venue;
+
 //venue = Venues.getVenue(key);
 venue = Venues.getVenueWithName(name);
+List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
 String venueName = Venues.getName(venue);
 String venueDescription = Venues.getDescription(venue);
 String venueAddress = Venues.getAddress(venue);
@@ -67,19 +69,30 @@ String venueAddress = Venues.getAddress(venue);
 			</p>
 			<span class="address"><%=venueAddress%></span>
 		</div>
+		<%if (eventsInThisVenue.isEmpty()) { %>
+		<div class="six columns offset-by-two" id="sidebar">
+			<h4>There are no events at <%=venueName%> at the moment...</h4>
+			<hr>
+			<h5>Come back later</h5>		
+		</div>
+		<%} else { %>
 		<div class="six columns offset-by-two" id="sidebar">
 			<h4>Upcoming Events at <%=venueName%>...</h4>
 			<hr>
-			<h5>Event One</h5>
+			<%for (Entity event : eventsInThisVenue) 
+			{
+				String eventName = Events.getName(event);
+				String eventDescription = Events.getDescription(event);
+				%>
+			
+			<h5><%=eventName %></h5>
 			<p>
-				Description One
+				<%=eventDescription %>
 			</p>
 			<br />
-			<h5>Event Two</h5>
-			<p>
-				Description Two
-			</p>
+			<%} %>
 		</div>
+		<%} %>
 	</div>
 <%@include file="../footer.jsp" %>
 	

@@ -1,5 +1,5 @@
 <%@page import="com.google.appengine.api.datastore.Entity"%>
-<%@page import="nightlifebuddy.Events, nightlifebuddy.Venues"%>
+<%@page import="nightlifebuddy.Events,nightlifebuddy.Venues"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
