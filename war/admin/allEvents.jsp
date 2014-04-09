@@ -30,10 +30,10 @@
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
 
 $(function() {
-	var availableTags;
+	var availableTags = new Array();
 	<%for (Entity venue : venues)
 	{%>
-	availableTags = availableTags.concat(<%=Venues.getName(venue)%>, ",");
+	availableTags.push("<%=Venues.getName(venue)%>");
 	<%}%>
     $( "#addEventInputVenue" ).autocomplete({
       source: availableTags

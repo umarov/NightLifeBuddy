@@ -10,7 +10,7 @@
    Licensed under the Academic Free License version 3.0
    http://opensource.org/licenses/AFL-3.0
 
-   Authors: Muzafar Umarov
+   Authors: ALFREDO LORIS
    
    Version 2 - Spring 2014
 -->
@@ -19,16 +19,17 @@
 <head>
 <%
 //Key key = KeyFactory.stringToKey(request.getParameter("id"));
-String name = request.getParameter("venueName");
-Entity venue;
+String name = request.getParameter("eventName");
+Entity event;
 
 //venue = Venues.getVenue(key);
-venue = Venues.getVenueWithName(name);
-List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
-String venueName = Venues.getName(venue);
-String venueDescription = Venues.getDescription(venue);
-String venueAddress = Venues.getAddress(venue);
+event = Events.getEventWithName(name);
+// List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
+String eventName = Events.getName(event);
+String eventDescription = Events.getDescription(event);
+String eventAddress = (String) Venues.getVenue(Events.getVenueKey(event)).getProperty("address");
 
+String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" + eventAddress +"&sensor=false";
 
 %>
 
@@ -56,43 +57,43 @@ String venueAddress = Venues.getAddress(venue);
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="/js/jquery.videoBG.js"></script>
   
+  
 </head>
 <body>
 
 <%@include file="/header.jsp" %>
 	<div class="row">
 		<div class="eight columns">
-			<h2><%=venueName%></h2>
+			<h2><%=eventName%></h2>
 			<hr>
 			<p>
-				<%=venueDescription%>
+				<%=eventDescription%>
 			</p>
-			<span class="address"><%=venueAddress%></span>
+			<span class="address"><%=eventAddress%></span>
+
+      <!-- Add Map here -->
+      <script
+         src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+      <script>
+      
+        var map;
+        function initialize() {
+          var mapOptions = {
+            zoom: 8,
+            center: new google.maps.LatLng(38.895475, -77.031755)
+          };
+          map = new google.maps.Map(document.getElementById('map-canvas'),
+              mapOptions);
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+    <div id="map-canvas" style="height:500px; width:700px"></div>
+			<!-- INSERT MAP HERE ALFREDO ???-->
 		</div>
-		<%if (eventsInThisVenue.isEmpty()) { %>
-		<div class="six columns offset-by-two" id="sidebar">
-			<h4>There are no events at the moment...</h4>
-			<hr>
-			<h5>Come back later</h5>		
-		</div>
-		<%} else { %>
-		<div class="six columns offset-by-two" id="sidebar">
-			<h4>Upcoming Events</h4>
-			<hr>
-			<%for (Entity event : eventsInThisVenue) 
-			{
-				String eventName = Events.getName(event);
-				String eventDescription = Events.getDescription(event);
-				%>
-			
-			<h5><a href="/events/profile.jsp?eventName=<%=eventName%>"><%=eventName %></a></h5>
-			<p>
-				<%=eventDescription %>
-			</p>
-			<br />
-			<%} %>
-		</div>
-		<%} %>
+		
 	</div>
 <%@include file="/footer.jsp" %>
 	

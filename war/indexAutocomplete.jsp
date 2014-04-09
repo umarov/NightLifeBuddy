@@ -41,54 +41,21 @@
   <script src="//code.jquery.com/jquery-1.11.0.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/jquery.videoBG.js"></script>
+  <script src="//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
   
   <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
 
-$.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js", function()
-{
-var substringMatcher = function(strs) {
-return function findMatches(q, cb) {
-var matches, substringRegex;
-
-// an array that will be populated with substring matches
-matches = [];
-
-// regex used to determine if a string contains the substring `q`
-substrRegex = new RegExp(q, 'i');
-
-// iterate through the pool of strings and for any string that
-// contains the substring `q`, add it to the `matches` array
-$.each(strs, function(i, str) {
-if (substrRegex.test(str)) {
-// the typeahead jQuery plugin expects suggestions to a
-// JavaScript object, refer to typeahead docs for more info
-matches.push({ value: str });
-}
-});
-
-cb(matches);
-};
-};
-
-var availableTags = new Array();
-<%for (Entity venue : venues)
-{%>
-availableTags.push("<%=Venues.getName(venue)%>");
-<%}%>
-
-$('#the-search-box .typeahead').typeahead({
-hint: true,
-highlight: true,
-minLength: 1
-},
-{
-name: 'venues',
-displayKey: 'value',
-source: substringMatcher(availableTags)
-});
-});
-
+$(function() {
+	var availableTags = new Array();
+	<%for (Entity venue : venues)
+	{%>
+	availableTags.push("<%=Venues.getName(venue)%>");
+	<%}%>
+    $( ".typeahead" ).autocomplete({
+      source: availableTags
+    });
+  });
   
   function loadUrl(location)
   {
@@ -131,14 +98,10 @@ source: substringMatcher(availableTags)
 	  				}
 	  		}
 	  	if (numResultsFound === 1)
-	  		{
-	  			loadUrl(redirectVenue);
-	  		}
-	  	else 
-	  		{
-	  			if (numResultsFound > 1)
-	  				$('#search-div').removeAttr('disabled');
-	  		}
+	  		loadUrl(redirectVenue);
+	  	else if (numResultsFound > 1)
+	  		$('#search-div').removeAttr('disabled');
+	  	
 	  	
 	  	
 	  	
@@ -162,7 +125,7 @@ source: substringMatcher(availableTags)
 		<div class="row">
 			
 		   <div class="eleven columns offset-by-five">
-		   		<div id="the-search-box" class="mainSearch left">
+		   		<div class="mainSearch left">
 		   				<input onkeydown="if (event.keyCode == 13) { document.getElementById('mainSearchButton').click(); return false; }" id="searchBox"  class="typeahead" type="text" placeholder="For example, 'Echostage'" autocomplete="off" name="search">
 				    	<input id="mainSearchButton" type="submit" value="search" />
 				</div> 

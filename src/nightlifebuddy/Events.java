@@ -233,7 +233,7 @@ public class Events
      * @param name The name of the event as a String.
      * @return A GAE {@link Entity} for the event or <code>null</code> if none or error.
      */
-	private static Entity getEventWithName(String name) 
+	public static Entity getEventWithName(String name) 
 	{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         return getEventWithName(datastore, name);
@@ -245,7 +245,7 @@ public class Events
      * @param name The name of the event as a String.
      * @return A GAE {@link Entity} for the Event or <code>null</code> if none or error.
      */
-	private static Entity getEventWithName(DatastoreService datastore,
+	public static Entity getEventWithName(DatastoreService datastore,
 			String name) 
 	{
 		Entity event = null;

@@ -1,6 +1,7 @@
 package nightlifebuddy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +18,7 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.gson.*;
 
 /**
  * GAE ENTITY UTIL CLASS: "Venue" <br>
@@ -415,6 +417,26 @@ public class Venues
     {
     	return result;
     }
+    
+    /**
+     * Return the local List variable result in JSON format
+     * @param none.
+     * @return String of results in JSON 
+     */
+    public static String getFirstVenuesJSON()
+    {
+    	Gson gson = new Gson();
+    	List<Entity> firstVenues = getFirstVenues(20);
+    	String[] venueNames = new String[20];
+    	HashMap<String, String> allVenues = new HashMap();
+    	for (int i = 0;i<firstVenues.size(); i++)
+    	{
+    		allVenues.put("name", new String((String) firstVenues.get(i).getProperty(NAME_PROPERTY)));
+    	}
+    	return gson.toJson(allVenues);
+    }
+    
+    
 
     /**
      * Search for the venues matching the search String parameter value.
