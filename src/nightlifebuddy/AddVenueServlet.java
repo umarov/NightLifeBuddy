@@ -27,7 +27,9 @@ public class AddVenueServlet extends HttpServlet {
                 String name = req.getParameter("venueName");
                 String description = req.getParameter("venueDescription");
                 String address = req.getParameter("venueAddress");
-                Venues.createVenue(name, description, address);
+                String ageReq = req.getParameter("ageRequirement");
+                String hours = req.getParameter("venueHours");
+                Venues.createVenue(name, description, address, ageReq, hours);
                 resp.sendRedirect("/admin/allVenues.jsp");
         }
 }

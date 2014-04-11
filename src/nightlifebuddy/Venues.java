@@ -167,6 +167,40 @@ public class Venues
 	}
 	
 	//
+	// AGE REQUIREMENT
+	//
+	
+	private static final String AGE_REQ_PROPERTY = "ageRequirement";
+	
+	public static int getAgeRequirement(Entity venue)
+	{
+		Object ageReq = venue.getProperty(AGE_REQ_PROPERTY);
+		if (ageReq == null)
+		{
+			ageReq = 21;
+			venue.setProperty(AGE_REQ_PROPERTY, ageReq);
+		}
+		return (int) ageReq;
+	}
+	
+	//
+	// Hours
+	//
+	
+	private static final String VENUE_HOURS_PROPERTY = "venueHours";
+	
+	public static String getVenueHours(Entity venue)
+	{
+		Object hours = venue.getProperty(VENUE_HOURS_PROPERTY);
+		if (hours == null)
+		{
+			hours = "10:00pm to 3:00am";
+			venue.setProperty(VENUE_HOURS_PROPERTY, hours);
+		}
+		return (String) hours;
+	}
+	
+	//
     // CREATE A VENUE
     //
 
@@ -177,7 +211,7 @@ public class Venues
      * @param address The address for this venue.
      * @return the Entity created with this name or null if error
      */
-	public static Entity createVenue(String name, String description, String address) 
+	public static Entity createVenue(String name, String description, String address, String age, String hours) 
 	{
         Entity venue = null;
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -194,6 +228,8 @@ public class Venues
                 venue.setProperty(NAME_PROPERTY, name);
                 venue.setProperty(DESCRIPTION_PROPERTY, description);
                 venue.setProperty(ADDRESS_PROPERTY, address);
+                venue.setProperty(AGE_REQ_PROPERTY, age);
+                venue.setProperty(VENUE_HOURS_PROPERTY, hours);
                 venue.setUnindexedProperty("events", allEvents);
                 datastore.put(venue);
 
@@ -326,7 +362,7 @@ public class Venues
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateVenueCommand(String name, String description, String address) 
+	public static boolean updateVenueCommand(String name, String description, String address, String age, String hours) 
 	{
         Entity venue = null;
         try {
@@ -334,6 +370,8 @@ public class Venues
         		venue.setProperty(NAME_PROPERTY, name);
         		venue.setProperty(DESCRIPTION_PROPERTY, description);
         		venue.setProperty(ADDRESS_PROPERTY, address);
+        		venue.setProperty(AGE_REQ_PROPERTY, age);
+        		venue.setProperty(VENUE_HOURS_PROPERTY, hours);
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(venue);
         } catch (Exception e) {

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class UpdateEventServlet extends HttpServlet {
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                Events.updateEventCommand(req.getParameter("eventName"), req.getParameter("eventDescription"), req.getParameter("eventAddress"));
+                Events.updateEventCommand(req.getParameter("eventName"), req.getParameter("eventDescription"), req.getParameter("eventAddress"), req.getParameter("ageRequirement"), req.getParameter("eventHours"));
 
                 resp.sendRedirect("/admin/allEvents.jsp");
         }

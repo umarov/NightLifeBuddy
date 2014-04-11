@@ -142,6 +142,40 @@ public class Events
         if (description == null) description = "";
         return (String) description;
 	}
+	
+	//
+	// AGE REQUIREMENT
+	//
+	
+	private static final String AGE_REQ_PROPERTY = "ageRequirement";
+	
+	public static int getAgeRequirement(Entity event)
+	{
+		Object ageReq = event.getProperty(AGE_REQ_PROPERTY);
+		if (ageReq == null)
+		{
+			ageReq = 18;
+			event.setProperty(AGE_REQ_PROPERTY, ageReq);
+		}
+		return (int) ageReq;
+	}
+	
+	//
+	// Hours
+	//
+	
+	private static final String EVENT_HOURS_PROPERTY = "eventHours";
+	
+	public static String getEventHours(Entity event)
+	{
+		Object hours = event.getProperty(EVENT_HOURS_PROPERTY);
+		if (hours == null)
+		{
+			hours = "9:00pm to 3:00am";
+			event.setProperty(EVENT_HOURS_PROPERTY, hours);			
+		}
+		return (String) hours;
+	}
     
 	//
     // ADDRESS
@@ -183,7 +217,7 @@ public class Events
      * @param address The address for this event.
      * @return the Entity created with this name or null if error
      */
-	public static Entity createEvent(String name, String description, String address, String venueName) 
+	public static Entity createEvent(String name, String description, String address, String venueName, String age, String hours) 
 	{
         Entity event = null;
         Entity venue = null;
@@ -204,6 +238,8 @@ public class Events
                 event.setProperty(NAME_PROPERTY, name);
                 event.setProperty(DESCRIPTION_PROPERTY, description);
                 event.setProperty(ADDRESS_PROPERTY, address);
+                event.setProperty(AGE_REQ_PROPERTY, age);
+                event.setProperty(EVENT_HOURS_PROPERTY, hours);
                 event.setProperty(VENUE_PROPERTY, venue.getKey());
                 
                 datastore.put(event);           
@@ -301,7 +337,7 @@ public class Events
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateEventCommand(String name, String description, String address) 
+	public static boolean updateEventCommand(String name, String description, String address, String age, String hours) 
 	{
         Entity event = null;
         try {
@@ -309,6 +345,8 @@ public class Events
         		event.setProperty(NAME_PROPERTY, name);
         		event.setProperty(DESCRIPTION_PROPERTY, description);
         		event.setProperty(ADDRESS_PROPERTY, address);
+        		event.setProperty(AGE_REQ_PROPERTY, age);
+                event.setProperty(EVENT_HOURS_PROPERTY, hours);
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(event);
         } catch (Exception e) {

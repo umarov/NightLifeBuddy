@@ -27,8 +27,10 @@ public class AddEventServlet extends HttpServlet {
                 String name = req.getParameter("eventName");
                 String description = req.getParameter("eventDescription");
                 String address = req.getParameter("eventAddress");
+                String age = req.getParameter("ageRequirement");
+                String hours = req.getParameter("eventHours");
                 String venueName = req.getParameter("venueName");
-                Events.createEvent(name, description, address, venueName);
+                Events.createEvent(name, description, address, venueName, age, hours);
                 resp.sendRedirect("/admin/allEvents.jsp");
         }
 }

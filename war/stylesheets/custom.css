@@ -17,6 +17,15 @@ body{
 	margin: 10px auto;
 }
 
+/*------------- typeahead styles ------------*/
+.tt-dropdown-menu{
+	background: #efefef;
+	top: 65% !important;
+	width: 98%;
+	border: 1px solid rgb(204, 204, 204);
+	padding-left: 4px;
+}
+
 /*---------------Header----------------*/
 #header{
 	margin: -1em auto 0;

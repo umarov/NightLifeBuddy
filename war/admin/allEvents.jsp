@@ -99,6 +99,8 @@ $(function() {
 			<th class="adminOperationsList">Admin stuffz</th>
 			<th>Event Name</th>
 			<th>Description</th>
+			<th>Age Requirement</th>
+			<th>Hours</th>
 			<th>Address</th>
 			<th>Venue</th>
 		</tr>
@@ -108,6 +110,8 @@ $(function() {
 					String eventName = Events.getName(event);
 					String eventDescription = Events.getDescription(event);
 					String eventAddress = Events.getAddress(event);
+					int ageReq = Events.getAgeRequirement(event);
+					String hours = Events.getEventHours(event);
 					venueKey = (Key) Events.getVenueKey(event);
 		%>
 
@@ -162,6 +166,8 @@ $(function() {
 				</div></td>
 				<td><div id="view<%=eventDescription%>"><%=eventDescription%></div></td>
 			<td><div id="view<%=eventAddress%>"><%=eventAddress%></div></td>
+			<td><div id="view<%=ageReq%>"><%=ageReq%></div></td>
+			<td><div id="view<%=hours%>"><%=hours%></div></td>
 			<td><div id="view<%=venueKey%>"><%=venueKey%></div></td>
 				
 				
@@ -182,6 +188,8 @@ $(function() {
 						Name: <input id="addEventInput" type="text" name="eventName" size="50" /><br>
 						Description: <input id="addEventInput" type="text" name="eventDescription" size="50" /><br>
 						Address: <input id="addEventInput" type="text" name="eventAddress" size="50" /><br>
+						Age Requirements: <input id="addEventInput" type="text" name="ageRequirement" size="50" /><br>
+						Event Hours: <input id="addEventInput" type="text" name="eventHours" size="50" /><br>
 						Venues: <input id="addEventInputVenue" type="text" name="venueName"/><br>
 						<input id="addEventButton" type="submit" value="Add" />
 					</form>

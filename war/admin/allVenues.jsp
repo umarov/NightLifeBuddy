@@ -86,6 +86,8 @@
 			<th>Venue Name</th>
 			<th>Description</th>
 			<th>Address</th>
+			<th>Age</th>
+			<th>Hours</th>
 			<th>View</th>
 		</tr>
 		<%
@@ -93,6 +95,8 @@
 					String venueName = Venues.getName(venue);
 					String venueDescription = Venues.getDescription(venue);
 					String venueAddress = Venues.getAddress(venue);
+					int ageReq = Venues.getAgeRequirement(venue);
+					String hours = Venues.getVenueHours(venue);
 		%>
 
 		<tr>
@@ -145,6 +149,8 @@
 				</div></td>
 				<td><div id="view<%=venueDescription%>"><%=venueDescription%></div></td>
 			<td><div id="view<%=venueAddress%>"><%=venueAddress%></div></td>
+			<td><div id="view<%=ageReq%>"><%=ageReq%></div></td>
+			<td><div id="view<%=hours%>"><%=hours%></div></td>
 				
 				
 		</tr>
@@ -163,6 +169,8 @@
 						Name: <input id="addVenueInput" type="text" name="venueName" size="50" /><br>
 						Description: <input id="addVenueInput" type="text" name="venueDescription" size="50" /><br>
 						Address: <input id="addVenueInput" type="text" name="venueAddress" size="50" /><br>
+						Age Requirement: <input id="addVenueInput" type="text" name="ageRequirement" size="50" /><br>
+						Venue Hours: <input id="addVenueInput" type="text" name="venueHours" size="50" /><br>
 						<input id="addVenueButton" type="submit" value="Add" />
 					</form>
 					<div id="addVenueError" class="error" style="display: none">Invalid venue name (minimum 3 characters:

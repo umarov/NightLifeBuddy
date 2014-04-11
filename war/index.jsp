@@ -100,6 +100,7 @@ source: substringMatcher(availableTags)
 	  document.getElementById('mainSearchButton').onclick = function search()
 	  {
 		$('#search-div').empty();
+		$('#search-div').className = 'results';
 		$('#search-div').attr('disabled', true);
 		
 		var searchCommand = document.getElementById('searchBox').value;
@@ -116,7 +117,8 @@ source: substringMatcher(availableTags)
 	  		{
 	  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
 	  				{
-	  					newLine = document.createElement('li');
+	  					newLine = document.createElement('div');
+	  					newLine.className = 'two-thirds column';
 	  					var searchResult = document.createElement('a');
 	  					
 	  					searchResult.appendChild(document.createTextNode(allVenues[index]));
@@ -137,7 +139,14 @@ source: substringMatcher(availableTags)
 	  	else 
 	  		{
 	  			if (numResultsFound > 1)
-	  				$('#search-div').removeAttr('disabled');
+	  				{ 
+	  					$('.typeahead').typeahead('close');
+	  					$('#search-div').removeAttr('disabled');
+	  				}
+	  			else
+	  				if(numResultsFound === 0)
+	  					searchDiv.appendChild(document.createTextNode("No venues found"));
+	  				
 	  		}
 	  	
 	  	

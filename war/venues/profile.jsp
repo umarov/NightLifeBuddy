@@ -28,6 +28,8 @@ List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
 String venueName = Venues.getName(venue);
 String venueDescription = Venues.getDescription(venue);
 String venueAddress = Venues.getAddress(venue);
+int ageReq = Venues.getAgeRequirement(venue);
+String hours = Venues.getVenueHours(venue);
 
 
 %>
@@ -54,20 +56,30 @@ String venueAddress = Venues.getAddress(venue);
   <!-- SCRIPTS -->
   <script src="//code.jquery.com/jquery-1.9.1.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <script src="/js/jquery.videoBG.js"></script>
+  <script src="../js/jquery.videoBG.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
   
 </head>
 <body>
 
-<%@include file="/header.jsp" %>
+<%@include file="../header.jsp" %>
 	<div class="row">
 		<div class="eight columns">
 			<h2><%=venueName%></h2>
 			<hr>
 			<p>
+				Minimum Age: <%=ageReq%>+
+			</p>
+			<p>
+				Hours: <%=hours%>
+			</p>
+			<p>
 				<%=venueDescription%>
 			</p>
-			<span class="address"><%=venueAddress%></span>
+			Address: <span class="address" id="eventAddress"><%=venueAddress%></span>
+			
+			<div id="map-canvas" style="height:500px; width:100%"></div>
+			
 		</div>
 		<%if (eventsInThisVenue.isEmpty()) { %>
 		<div class="six columns offset-by-two" id="sidebar">
@@ -94,7 +106,40 @@ String venueAddress = Venues.getAddress(venue);
 		</div>
 		<%} %>
 	</div>
-<%@include file="/footer.jsp" %>
+	
+	<script>
+	var geocoder = new google.maps.Geocoder();
+	var map;
+
+	function initialize() {
+	  geocoder = new google.maps.Geocoder();
+	  var latlng = new google.maps.LatLng(38.895475, -77.031755);
+	  var mapOptions = {
+	    zoom: 15,
+	    center: latlng
+	  }
+	  map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+	  codeAddress();
+	}
+	
+	function codeAddress() {
+	  var address = document.getElementById("eventAddress").innerHTML;
+	  geocoder.geocode( { 'address': address}, function(results, status) {
+	    if (status == google.maps.GeocoderStatus.OK) {
+	      map.setCenter(results[0].geometry.location);
+	      var marker = new google.maps.Marker({
+	          map: map,
+	          position: results[0].geometry.location
+	      });
+	    } else {
+	      alert("Geocode was not successful for the following reason: " + status);
+	    }
+	  });
+	}
+	
+	google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<%@include file="../footer.jsp" %>
 	
 </body>
 </html>
