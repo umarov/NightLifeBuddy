@@ -176,13 +176,13 @@ public class Venues
 	
 	public static int getAgeRequirement(Entity venue)
 	{
-		Object ageReq = 0;
+		int ageReq = 0;
 		if (((Number)venue.getProperty(AGE_REQ_PROPERTY)) == null)
 		{
 			ageReq = 21;
 			venue.setProperty(AGE_REQ_PROPERTY, ageReq);
 		} else
-			ageReq = ((Number)venue.getProperty(AGE_REQ_PROPERTY)) == null;
+			ageReq = ((Number)venue.getProperty(AGE_REQ_PROPERTY)).intValue();
 		return (int) ageReq;
 	}
 	

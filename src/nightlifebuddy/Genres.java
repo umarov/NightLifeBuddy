@@ -95,8 +95,11 @@ public class Genres
      */
 	public static String getName(Entity genre) 
 	{
-        Object name = genre.getProperty(NAME_PROPERTY);
-        if (name == null) name = "";
+        Object name;
+        if (genre == null) 
+        	name = "No Genre Assigned";
+        else
+        	name = genre.getProperty(NAME_PROPERTY);
         return (String) name;
 	}
 

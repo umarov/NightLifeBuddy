@@ -150,12 +150,13 @@ public class Events
 	
 	public static int getAgeRequirement(Entity event)
 	{
-		Object ageReq = ((Number) event.getProperty(AGE_REQ_PROPERTY)).intValue();
-		if (ageReq == null)
+		int ageReq = 0;
+		if (((Number)event.getProperty(AGE_REQ_PROPERTY)) == null)
 		{
-			ageReq = 18;
+			ageReq = 21;
 			event.setProperty(AGE_REQ_PROPERTY, ageReq);
-		}
+		} else
+			ageReq = ((Number)event.getProperty(AGE_REQ_PROPERTY)).intValue();
 		return (int) ageReq;
 	}
 	
