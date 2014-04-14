@@ -81,6 +81,33 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	    <servlet-name>SearchEventServlet</servlet-name>
 	    <url-pattern>/seachEventCommand</url-pattern>	    
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.AddGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddGenreServlet</servlet-name>
+		<url-pattern>/addGenreCommand</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.DeleteGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeleteGenreServlet</servlet-name>
+		<url-pattern>/deleteGenreCommand</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <servlet-class>nightlifebuddy.SearchGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>SearchGenreServlet</servlet-name>
+	    <url-pattern>/seachGenreCommand</url-pattern>	    
+	</servlet-mapping>
     
 	<servlet>
 		<servlet-name>AddVenueServlet</servlet-name>
@@ -116,6 +143,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-mapping>
 	    <servlet-name>SearchVenueServlet</servlet-name>
 	    <url-pattern>/seachVenueCommand</url-pattern>	    
+	</servlet-mapping>
+	
+	<servlet>
+	    <servlet-name>GetAllVenuesServlet</servlet-name>
+	    <servlet-class>nightlifebuddy.GetAllVenuesServletJSON</servlet-class>	    
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>GetAllVenuesServlet</servlet-name>
+	    <url-pattern>/getAllVenues</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>

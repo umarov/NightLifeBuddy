@@ -1,6 +1,6 @@
 <%@page import="com.google.appengine.api.datastore.Entity"%>
 <%@page import="com.google.appengine.api.datastore.Key, com.google.appengine.api.datastore.KeyFactory" %>
-<%@page import="nightlifebuddy.Venues, nightlifebuddy.Events"%>
+<%@page import="nightlifebuddy.Venues, nightlifebuddy.Events, nightlifebuddy.Genres"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -30,6 +30,7 @@ String eventDescription = Events.getDescription(event);
 String eventAddress = (String) Venues.getVenue(Events.getVenueKey(event)).getProperty("address");
 int ageReq = Events.getAgeRequirement(event);
 String hours = Events.getEventHours(event);
+String genre = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
 
 String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" + eventAddress +"&sensor=false";
 
@@ -69,6 +70,9 @@ String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" + event
 		<div class="eight columns">
 			<h2><%=eventName%></h2>
 			<hr>
+			<p>
+				Genre: <%=genre %>
+			</p>
 			<p>
 				Minimum Age: <%=ageReq%>+
 			</p>

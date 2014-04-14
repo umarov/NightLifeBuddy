@@ -1,5 +1,5 @@
 <%@page import="com.google.appengine.api.datastore.Entity"%>
-<%@page import="nightlifebuddy.Events,nightlifebuddy.Venues"%>
+<%@page import="nightlifebuddy.Events,nightlifebuddy.Venues, nightlifebuddy.Genres"%>
 <%@page contentType="text/html;charset=UTF-8" language="java"%>
 <%@page import="java.util.List"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
@@ -28,17 +28,29 @@
 
 <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
-
-$(function() {
-	var availableTags = new Array();
-	<%for (Entity venue : venues)
-	{%>
-	availableTags.push("<%=Venues.getName(venue)%>");
-	<%}%>
-    $( "#addEventInputVenue" ).autocomplete({
-      source: availableTags
+<%List<Entity> genres = Genres.getFirstGenres(20);%>
+$(function(){var venues = new Array();
+<%for (Entity venue : venues)
+{%>
+venues.push("<%=Venues.getName(venue)%>");
+<%}%>
+$( "#addEventInputVenue" ).autocomplete({
+    	
+      source: venues
     });
-  });
+});
+    
+$(function(){var genres = new Array();
+<%for (Entity genre : genres)
+{%>
+genres.push("<%=Genres.getName(genre)%>");
+<%}%> 
+    $( "#addEventInputGenre" ).autocomplete({
+    	
+      source: genres
+    });
+
+});
 
 </script>
 
@@ -99,13 +111,15 @@ $(function() {
 			<th class="adminOperationsList">Admin stuffz</th>
 			<th>Event Name</th>
 			<th>Description</th>
+			<th>Address</th>
 			<th>Age Requirement</th>
 			<th>Hours</th>
-			<th>Address</th>
 			<th>Venue</th>
+			<th>Genre</th>
 		</tr>
 		<%
 			Key venueKey;
+			String genreName;
 			for (Entity event : allEvents) {
 					String eventName = Events.getName(event);
 					String eventDescription = Events.getDescription(event);
@@ -113,6 +127,9 @@ $(function() {
 					int ageReq = Events.getAgeRequirement(event);
 					String hours = Events.getEventHours(event);
 					venueKey = (Key) Events.getVenueKey(event);
+					genreName = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
+					
+					
 		%>
 
 		<tr>
@@ -169,6 +186,7 @@ $(function() {
 			<td><div id="view<%=ageReq%>"><%=ageReq%></div></td>
 			<td><div id="view<%=hours%>"><%=hours%></div></td>
 			<td><div id="view<%=venueKey%>"><%=venueKey%></div></td>
+			<td><div id="view<%=genreName %>"><%=genreName %></div>
 				
 				
 		</tr>
@@ -191,6 +209,7 @@ $(function() {
 						Age Requirements: <input id="addEventInput" type="text" name="ageRequirement" size="50" /><br>
 						Event Hours: <input id="addEventInput" type="text" name="eventHours" size="50" /><br>
 						Venues: <input id="addEventInputVenue" type="text" name="venueName"/><br>
+						Genre: <input id="addEventInputGenre" type="text" name="genreName"/><br>
 						<input id="addEventButton" type="submit" value="Add" />
 					</form>
 					<div id="addEventError" class="error" style="display: none">Invalid event name (minimum 3 characters:

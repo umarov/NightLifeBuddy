@@ -159,7 +159,7 @@ public class Genres
      * @param name The name of the genre as a String.
      * @return A GAE {@link Entity} for the genre or <code>null</code> if none or error.
      */
-	private static Entity getGenreWithName(String name) 
+	public static Entity getGenreWithName(String name) 
 	{
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         return getGenreWithName(datastore, name);
@@ -324,5 +324,17 @@ public class Genres
 
 	}
 
+	
+	public static Entity getGenreByKey(Key key) 
+	{
+        Entity venue = null;
+        try {
+                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                venue = datastore.get(key);
+        } catch (Exception e) {
+                // TODO log the error
+        }
+        return venue;
+	}
 
 }

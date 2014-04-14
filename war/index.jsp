@@ -39,121 +39,136 @@
   
   <!-- SCRIPTS -->
   <script src="//code.jquery.com/jquery-1.11.0.js"></script>
+  <script src="js/typeahead.bundle.min.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/jquery.videoBG.js"></script>
   
   <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
-
+/*
+var allVenues;
+$(document).ready(function getVenues(){
+	var gettingVenues = $.post("/getAllVenues");
+	gettingVenues.done(function(data){
+		return data;
+	})
+	gettingVenues.fail(function(data){
+		console.log("fail!");
+	})
+});
+*/
 $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js", function()
-{
-var substringMatcher = function(strs) {
-return function findMatches(q, cb) {
-var matches, substringRegex;
+		{
+		var substringMatcher = function(strs) {
+		return function findMatches(q, cb) {
+		var matches, substringRegex;
 
-// an array that will be populated with substring matches
-matches = [];
+		// an array that will be populated with substring matches
+		matches = [];
 
-// regex used to determine if a string contains the substring `q`
-substrRegex = new RegExp(q, 'i');
+		// regex used to determine if a string contains the substring `q`
+		substrRegex = new RegExp(q, 'i');
 
-// iterate through the pool of strings and for any string that
-// contains the substring `q`, add it to the `matches` array
-$.each(strs, function(i, str) {
-if (substrRegex.test(str)) {
-// the typeahead jQuery plugin expects suggestions to a
-// JavaScript object, refer to typeahead docs for more info
-matches.push({ value: str });
-}
-});
+		// iterate through the pool of strings and for any string that
+		// contains the substring `q`, add it to the `matches` array
+		$.each(strs, function(i, str) {
+		if (substrRegex.test(str)) {
+		// the typeahead jQuery plugin expects suggestions to a
+		// JavaScript object, refer to typeahead docs for more info
+		matches.push({ value: str });
+		}
+		});
 
-cb(matches);
-};
-};
+		cb(matches);
+		};
+		};
 
-var availableTags = new Array();
-<%for (Entity venue : venues)
-{%>
-availableTags.push("<%=Venues.getName(venue)%>");
-<%}%>
+		var availableTags = new Array();
+		<%for (Entity venue : venues)
+		{%>
+		availableTags.push("<%=Venues.getName(venue)%>");
+		<%}%>
 
-$('#the-search-box .typeahead').typeahead({
-hint: true,
-highlight: true,
-minLength: 1
-},
-{
-name: 'venues',
-displayKey: 'value',
-source: substringMatcher(availableTags)
-});
-});
+		$('#the-search-box .typeahead').typeahead({
+		hint: true,
+		highlight: true,
+		minLength: 1
+		},
+		{
+		name: 'venues',
+		displayKey: 'value',
+		source: substringMatcher(availableTags)
+		});
+		});
 
-  
-  function loadUrl(location)
-  {
-	  this.document.location.href = location;
-  }
-  window.onload = function()
-  {
-	  var searchDiv = document.getElementById('search-div');
-	  document.getElementById('mainSearchButton').onclick = function search()
-	  {
-		$('#search-div').empty();
-		$('#search-div').className = 'results';
-		$('#search-div').attr('disabled', true);
-		
-		var searchCommand = document.getElementById('searchBox').value;
-	  	var allVenues = new Array();
-	  	<%for (Entity venue : venues)
-	  	{%>
-	  	allVenues.push('<%=Venues.getName(venue)%>');
-	  	<%}%>
-	  	var index;
-	  	var numResultsFound = 0;
-	  	var redirectVenue;
-	  	var newLine = document.createElement('li');
-	  	for(index = 0; searchCommand != "" && index < allVenues.length; index++)
-	  		{
-	  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
-	  				{
-	  					newLine = document.createElement('div');
-	  					newLine.className = 'two-thirds column';
-	  					var searchResult = document.createElement('a');
-	  					
-	  					searchResult.appendChild(document.createTextNode(allVenues[index]));
-	  					searchResult.title = allVenues[index] + " profile";
-	  					searchResult.href = "/venues/profile.jsp?venueName=" + allVenues[index];
-	  					newLine.appendChild(searchResult);
-	  					searchDiv.appendChild(newLine);
-	  					redirectVenue = searchResult.href;
-	  					numResultsFound++; 					
-	  					
-	  					
-	  				}
-	  		}
-	  	if (numResultsFound === 1)
-	  		{
-	  			loadUrl(redirectVenue);
-	  		}
-	  	else 
-	  		{
-	  			if (numResultsFound > 1)
-	  				{ 
-	  					$('.typeahead').typeahead('close');
-	  					$('#search-div').removeAttr('disabled');
-	  				}
-	  			else
-	  				if(numResultsFound === 0)
-	  					searchDiv.appendChild(document.createTextNode("No venues found"));
-	  				
-	  		}
-	  	
-	  	
-	  	
-	  }
-  }
-  
+		  
+		  function loadUrl(location)
+		  {
+			  this.document.location.href = location;
+		  }
+		  window.onload = function()
+		  {
+			  var searchDiv = document.getElementById('search-div');
+			  document.getElementById('mainSearchButton').onclick = function search()
+			  {
+				$('#search-div').empty();
+				$('#search-div').className = 'results';
+				$('#search-div').attr('disabled', true);
+
+				var searchCommand = document.getElementById('searchBox').value;
+				var choices = ['Events', 'Genres', 'Venues', 'Age Requirement'];
+			  	var allVenues = new Array();
+			  	<%for (Entity venue : venues)
+			  	{%>
+			  	allVenues.push('<%=Venues.getName(venue)%>');
+			  	<%}%>
+			  	var index;
+			  	var numResultsFound = 0;
+			  	var redirectVenue;
+			  	var newLine = document.createElement('li');
+			  	for(index = 0; searchCommand != "" && index < allVenues.length; index++)
+			  		{
+			  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
+			  				{
+			  					newLine = document.createElement('div');
+			  					newLine.className = 'two-thirds column';
+			  					var searchResult = document.createElement('a');
+
+			  					searchResult.appendChild(document.createTextNode(allVenues[index]));
+			  					searchResult.title = allVenues[index] + " profile";
+			  					searchResult.href = "/venues/profile.jsp?venueName=" + allVenues[index];
+			  					newLine.appendChild(searchResult);
+			  					searchDiv.appendChild(newLine);
+			  					redirectVenue = searchResult.href;
+			  					numResultsFound++; 					
+
+
+			  				}
+			  		}
+			  	if (numResultsFound === 1)
+			  		{
+			  			loadUrl(redirectVenue);
+			  		}
+			  	else 
+			  		{
+			  			if (numResultsFound > 1)
+			  				{ 
+			  					$('.typeahead').typeahead('close');
+			  					$('#search-div').removeAttr('disabled');
+			  				}
+			  			else
+			  				if(numResultsFound === 0)
+			  					searchDiv.appendChild(document.createTextNode("No venues found"));
+
+			  		}
+
+
+
+			  }
+		  }
+		  
+
+
 
 </script>
 

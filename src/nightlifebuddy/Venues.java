@@ -18,6 +18,8 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.gson.*;
 
 /**
@@ -174,12 +176,13 @@ public class Venues
 	
 	public static int getAgeRequirement(Entity venue)
 	{
-		Object ageReq = venue.getProperty(AGE_REQ_PROPERTY);
-		if (ageReq == null)
+		Object ageReq = 0;
+		if (((Number)venue.getProperty(AGE_REQ_PROPERTY)) == null)
 		{
 			ageReq = 21;
 			venue.setProperty(AGE_REQ_PROPERTY, ageReq);
-		}
+		} else
+			ageReq = ((Number)venue.getProperty(AGE_REQ_PROPERTY)) == null;
 		return (int) ageReq;
 	}
 	
@@ -211,7 +214,7 @@ public class Venues
      * @param address The address for this venue.
      * @return the Entity created with this name or null if error
      */
-	public static Entity createVenue(String name, String description, String address, String age, String hours) 
+	public static Entity createVenue(String name, String description, String address, int age, String hours) 
 	{
         Entity venue = null;
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -362,7 +365,7 @@ public class Venues
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateVenueCommand(String name, String description, String address, String age, String hours) 
+	public static boolean updateVenueCommand(String name, String description, String address, int age, String hours) 
 	{
         Entity venue = null;
         try {
@@ -461,17 +464,27 @@ public class Venues
      * @param none.
      * @return String of results in JSON 
      */
-    public static String getFirstVenuesJSON()
+    public static JSONObject getFirstVenuesJSON()
     {
-    	Gson gson = new Gson();
     	List<Entity> firstVenues = getFirstVenues(20);
-    	String[] venueNames = new String[20];
-    	HashMap<String, String> allVenues = new HashMap();
-    	for (int i = 0;i<firstVenues.size(); i++)
+    	JSONObject allVenues = new JSONObject();
+    	try {
+			allVenues.put("name", getAllVenueNames(firstVenues));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return allVenues;
+    }
+    
+    public static List<String> getAllVenueNames(List<Entity> firstVenues)
+    {
+    	List<String> venueNames = new ArrayList<String>();
+    	for (int i = 0; i < firstVenues.size(); i++)
     	{
-    		allVenues.put("name", new String((String) firstVenues.get(i).getProperty(NAME_PROPERTY)));
+    		venueNames.add((String)firstVenues.get(i).getProperty(NAME_PROPERTY));
     	}
-    	return gson.toJson(allVenues);
+    	return venueNames;
     }
     
     

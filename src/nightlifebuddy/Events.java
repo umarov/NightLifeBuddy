@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.appengine.api.datastore.BaseDatastoreService;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -151,7 +150,7 @@ public class Events
 	
 	public static int getAgeRequirement(Entity event)
 	{
-		Object ageReq = event.getProperty(AGE_REQ_PROPERTY);
+		Object ageReq = ((Number) event.getProperty(AGE_REQ_PROPERTY)).intValue();
 		if (ageReq == null)
 		{
 			ageReq = 18;
@@ -217,10 +216,11 @@ public class Events
      * @param address The address for this event.
      * @return the Entity created with this name or null if error
      */
-	public static Entity createEvent(String name, String description, String address, String venueName, String age, String hours) 
+	public static Entity createEvent(String name, String description, String address, String venueName, int age, String hours, String genreName) 
 	{
         Entity event = null;
         Entity venue = null;
+        Entity genre = null;
         
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         TransactionOptions options = TransactionOptions.Builder.withXG(true);
@@ -235,12 +235,14 @@ public class Events
                 
                 event = new Entity(ENTITY_KIND);
                 venue = Venues.getVenueWithName(venueName);
+                genre = Genres.getGenreWithName(genreName);
                 event.setProperty(NAME_PROPERTY, name);
                 event.setProperty(DESCRIPTION_PROPERTY, description);
                 event.setProperty(ADDRESS_PROPERTY, address);
                 event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
                 event.setProperty(VENUE_PROPERTY, venue.getKey());
+                event.setProperty(GENRE_PROPERTY, genre.getKey());
                 
                 datastore.put(event);           
                 txn.commit();
@@ -263,6 +265,20 @@ public class Events
 		Key venueKey =  (Key) event.getProperty(VENUE_PROPERTY);
 		return venueKey;
 	}
+	
+	//
+	// GENRE
+	//
+	
+	public static final String GENRE_PROPERTY = "genre";
+	
+	
+	public static Key getGenreKey(Entity event)
+	{
+		Key genreKey = (Key) event.getProperty(GENRE_PROPERTY);
+		return genreKey;
+	}
+	
 	
 	/**
      * Get an event based on a string containing its venueName.
@@ -337,16 +353,22 @@ public class Events
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateEventCommand(String name, String description, String address, String age, String hours) 
+	public static boolean updateEventCommand(String name, String description, String address, String venueName, int age, String hours, String genreName) 
 	{
         Entity event = null;
+        Entity venue = null;
+        Entity genre = null;
         try {
         		event = getEvent(name);
+        		venue = Venues.getVenueWithName(venueName);
+        		genre = Genres.getGenre(genreName);
         		event.setProperty(NAME_PROPERTY, name);
         		event.setProperty(DESCRIPTION_PROPERTY, description);
         		event.setProperty(ADDRESS_PROPERTY, address);
+        		event.setProperty(VENUE_PROPERTY, venue.getKey());
         		event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
+                event.setProperty(GENRE_PROPERTY, genre.getKey());
                 DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(event);
         } catch (Exception e) {

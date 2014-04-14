@@ -21,8 +21,15 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class UpdateVenueServlet extends HttpServlet {
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-                Venues.updateVenueCommand(req.getParameter("venueName"), req.getParameter("venueDescription"), req.getParameter("venueAddress"), req.getParameter("ageRequirement"), req.getParameter("venueHours"));
+                
+        	String name = req.getParameter("venueName");
+        	String desc = req.getParameter("venueDescription");
+        	String address = req.getParameter("venueAddress");
+        	int agereq =  Integer.parseInt(req.getParameter("ageRequirement"));
+        	String hours = req.getParameter("venueHours");
+        	
+        	Venues.updateVenueCommand(name, desc, address, agereq, hours);
 
-                resp.sendRedirect("/admin/allVenues.jsp");
+            resp.sendRedirect("/admin/allVenues.jsp");
         }
 }
