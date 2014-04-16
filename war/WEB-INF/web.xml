@@ -108,6 +108,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	    <servlet-name>SearchGenreServlet</servlet-name>
 	    <url-pattern>/seachGenreCommand</url-pattern>	    
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>UpdateGenreServlet</servlet-name>
+		<servlet-class>nightlifebuddy.UpdateGenreServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateGenreServlet</servlet-name>
+		<url-pattern>/updateGenreCommand</url-pattern>
+	</servlet-mapping>
     
 	<servlet>
 		<servlet-name>AddVenueServlet</servlet-name>

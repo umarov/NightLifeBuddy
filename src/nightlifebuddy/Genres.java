@@ -229,16 +229,21 @@ public class Genres
      * @param description The description of the genre as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateGenreCommand(String name) 
+	public static boolean updateGenreCommand(String oldGenreName, String newGenreName) 
 	{
         Entity genre = null;
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Transaction txn = datastore.beginTransaction();
         try {
-        		genre = getGenre(name);
-        		genre.setProperty(NAME_PROPERTY, name);
-                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        		genre = getGenreWithName(oldGenreName);
+        		genre.setProperty(NAME_PROPERTY, newGenreName);
+                datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(genre);
-        } catch (Exception e) {
-                return false;
+                txn.commit();
+        } finally {
+            if (txn.isActive()) {
+                txn.rollback();
+            }
         }
         return true;
 	}

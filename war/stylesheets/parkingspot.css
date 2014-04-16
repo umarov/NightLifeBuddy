@@ -10,7 +10,7 @@
    Version 0.1 - Fall 2013
 */
 .menu {
-	width: 690px;
+	width: 55%;
 	padding: 0px;
 	margin: 0px;
 	background-color: #E9FFE9;
@@ -48,7 +48,7 @@
 }
 
 #main {
-	width: 700px;
+	width: 60%;
 	margin: 0px;
 	margin-bottom: 3px;
 }

@@ -365,20 +365,27 @@ public class Venues
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateVenueCommand(String name, String description, String address, int age, String hours) 
+	public static boolean updateVenueCommand(String oldName, String name, String description, String address, int age, String hours) 
 	{
         Entity venue = null;
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Transaction txn = datastore.beginTransaction();
         try {
-        		venue = getVenue(getKey(name));
+        		venue = getVenueWithName(oldName);
         		venue.setProperty(NAME_PROPERTY, name);
         		venue.setProperty(DESCRIPTION_PROPERTY, description);
         		venue.setProperty(ADDRESS_PROPERTY, address);
         		venue.setProperty(AGE_REQ_PROPERTY, age);
         		venue.setProperty(VENUE_HOURS_PROPERTY, hours);
-                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(venue);
+                txn.commit();
         } catch (Exception e) {
                 return false;
+        } finally {
+            if (txn.isActive()) {
+                txn.rollback();
+            }
         }
         return true;
 	}

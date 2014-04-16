@@ -9,6 +9,7 @@
 package nightlifebuddy;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.*;
 import javax.servlet.ServletException;
@@ -23,12 +24,14 @@ public class UpdateVenueServlet extends HttpServlet {
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
                 
         	String name = req.getParameter("venueName");
+        	String oldName = req.getParameter("oldVenueName");
         	String desc = req.getParameter("venueDescription");
         	String address = req.getParameter("venueAddress");
         	int agereq =  Integer.parseInt(req.getParameter("ageRequirement"));
         	String hours = req.getParameter("venueHours");
         	
-        	Venues.updateVenueCommand(name, desc, address, agereq, hours);
+        	PrintWriter out = resp.getWriter();
+        	out.print(Venues.updateVenueCommand(oldName, name, desc, address, agereq, hours));
 
             resp.sendRedirect("/admin/allVenues.jsp");
         }

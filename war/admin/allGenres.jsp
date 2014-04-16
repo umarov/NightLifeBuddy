@@ -20,125 +20,31 @@
 <title>All Genres</title>
 <!-- CSS -->
 <link rel="stylesheet" type="text/css" href="/stylesheets/parkingspot.css">
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 
 <script>
 
-var selectedGenreForEdit = null  
-var editNameError = false;
 
-$(document).ready(function(){ //test
+function makeEditable(key)
+{
 	
-	// keypress genre for Add button
-	$("#addGenreInput").keyup(function() {
-	genreName=$("#addGenreInput").val();
-	if (checkGenreName(genreName)) {
-		$("#addGenreButton").attr("disabled",null);
-		$("#addGenreError").hide();
-	} else {
-		$("#addGenreButton").attr("disabled","disabled");
-		if (genreName!=null && genreName.length>0) 
-			$("#addGenreError").show();
+	var readOnlyStatus = document.getElementById('edit'+key+'Input').readOnly;
+	if (readOnlyStatus)
+	{
+		document.getElementById('edit'+key+'Input').readOnly = false;
+		console.log("edit"+key+"Input" + " is editable");
 	}
-	});
-	
-	$(".editGenreNameInput").keyup(function() {
-		if (selectedGenreForEdit==null)
-			return;
-		genreName=$("#editGenreNameInput"+selectedGenreForEdit).val();
-		editNameError = ! checkGenreName(genreName);
-		updateSaveEditButton();
-		});
-	
-});
-
-
-
-function updateSaveEditButton() {
-	if (editNameError||editDescriptionError||editAddressError) {
-		$("#saveEditGenreButton"+selectedGenreForEdit).attr("disabled","disabled", "disabled");
-	} else {
-		$("#saveEditGenreButton"+selectedGenreForEdit).attr("disabled",null);
+	else
+	{
+		document.getElementById('edit'+key+'Input').readOnly = true;
+		console.log("edit"+key+"Input" + " is not editable");
 	}
-	if (editNameError) {
-		$("#editGenreNameError"+selectedGenreForEdit).show();
-	} else {
-		$("#editGenreNameError"+selectedGenreForEdit).hide();
-	}
-	
 }
 
 
-
-var genreNamePattern = /^[ \w-'',]{3,100}$/
-genreNamePattern.compile(genreNamePattern)
-
-// check the syntax of the name of a venue 
-function checkGenreName(genreName) {
-	return genreNamePattern.test(genreName);
-}
-
-
-function disableAllButtons(value) {
-	$(".deletebutton").attr("disabled", (value)?"disabled":null);
-	$(".editbutton").attr("disabled", (value)?"disabled":null);
-	if (value)
-		$("#addGenreButton").attr("disabled", (value)?"disabled":null);
-}
-
-function deleteButton(genreName) {
-	disableAllButtons(true);
-	$("#delete"+genreName).show();
-}
-
-var selectedGenreForDelete=null;
-
-function confirmDeleteGenre(genreName) {
-	selectedGenreForDelete=genreName;
-	$.post("admin/deleteGenreCommand", 
-			{genreName: genreName}, 
-			function (data,status) {
-				//alert("Data "+data+" status "+status);
-			
-				cancelDeleteGenre(selectedGenreForDelete);
-				selectedGenre=null;
-				
-			}
-			
-	);
-	
-}
-
-function cancelDeleteGenre(genreName) {
-	$("#delete"+genreName).hide();
-	disableAllButtons(false);
-}
-
-var selectedGenreOldName=null;
-
-function editButton(genreName) {
-	selectedGenreForEdit=genreName;
-	disableAllButtons(true);
-	editNameError = false;
-	updateSaveEditButton();
-	selectedGenreOldName=$("#editGenreNameInput"+selectedGenreForEdit).val();	
-	$("#view"+genreName).hide();
-	$("#edit"+genreName).show();
-}
-
-
-function saveEditGenre(genreName) {
-	document.forms["form"+genreName].submit();
-}
-
-function cancelEditGenre(genreName) {
-	$("#editGenreNameInput"+genreName).val(selectedGenreOldName);
-	$("#edit"+genreName).hide();
-	$("#view"+genreName).show();
-	disableAllButtons(false);
-}
 
 </script>
+
 
 </head>
 <body>
@@ -182,59 +88,27 @@ function cancelEditGenre(genreName) {
 
 	<table id="main">
 		<tr>
-			<th class="adminOperationsList">Admin stuffz</th>
-			<th>Genre Name</th>
-			<th>View</th>
+			<th>Genre Name (Double Click to edit)</th>
 		</tr>
 		<%
-			for (Entity genre : allGenres) {
+		int i = 0;	
+		for (Entity genre : allGenres) {
 					String genreName = Genres.getName(genre);
+					Long key = Genres.getKey(genreName).getId();
 		%>
 
 		<tr>
-			<td class="adminOperationsList">
-				<button class="editbutton" type="button"
-					onclick="editButton(<%=genreName%>)">Edit</button>
-				<button class="deletebutton" type="button" onclick="deleteButton(<%=genreName%>)">Delete</button>
-			</td>
-
-			<td><div id="view<%=genreName%>"><%=genreName%></div>
-
-				<div id="edit<%=genreName%>" style="display: none">
-
-					<form id="form<%=genreName%>" action="/updateGenreCommand" method="get">
-						<input type="hidden" value="<%=genreName%>" name="genreName" />
-						
-						
-						<table class="editTable">
-							<tr>
-								<td class="editTable" width=90>Name:</td>
-								<td class="editTable"><input type="text" id="/editGenreNameInput<%=genreName%>" class="editVenueNameInput"
-										value="<%=genreName%>" name="genreName" />
-									<div id="editVenueNameError<%=genreName%>" class="error" style="display: none">Invalid genre name
-										(minimum 3 characters: letters, digits, spaces, -, ')</div></td>
-							</tr>
-							
-						</table>
-						
-
-						
-						<button id="saveEditGenreButton<%=genreName%>" type="button" onclick="saveEditGenre(<%=genreName%>)">Save</button>
-						<button type="button" onclick="cancelEditGenre(<%=genreName%>)">Cancel</button>
-					</form>
-				</div>
-
-				<div id="delete<%=genreName%>" style="display: none">
-					Do you want to delete this venue?
-					<button type="button" onclick="confirmDeleteGenre(<%=genreName%>)">Delete</button>
-					<button type="button" onclick="cancelDeleteGenre(<%=genreName%>)">Cancel</button>
-				</div></td>
-				
-				
+			<td><div id="edit<%=i%>">
+				<form action="/updateGenreCommand" method="get">
+				<input id="edit<%=i%>Input" ondblclick="makeEditable(<%=i %>)" readonly="true" name="genreName" value="<%=genreName%>"/>
+				<input type="hidden" value="<%=genreName%>" name="oldGenreName"/>
+				</form>
+			</div>	
 		</tr>
 
 		<%
-			}
+			i++;	
+		}
 
 			}
 		%>
@@ -256,4 +130,6 @@ function cancelEditGenre(genreName) {
 	</table>
 
 </body>
+
+
 </html>
