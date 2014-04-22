@@ -29,6 +29,7 @@
 <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
 <%List<Entity> genres = Genres.getFirstGenres(20);%>
+
 $(function(){var venues = new Array();
 <%for (Entity venue : venues)
 {%>
@@ -39,6 +40,7 @@ $( "#addEventInputVenue" ).autocomplete({
       source: venues
     });
 });
+
     
 $(function(){var genres = new Array();
 <%for (Entity genre : genres)
@@ -51,6 +53,69 @@ genres.push("<%=Genres.getName(genre)%>");
     });
 
 });
+
+window.onload = function() {
+	
+	var venuesListDiv = document.getElementById('addVenueName');
+	var venuesList = document.createElement('select');
+	
+	<%for (Entity venue : venues)
+	{%>
+	var option = document.createElement('option');
+	option.text ="<%=Venues.getName(venue)%>";
+	venuesList.appendChild(option);
+	<%}%>
+	venuesList.name = "venueName";
+	venuesList.form = "createNewVenueForm";
+	
+	venuesListDiv.appendChild(venuesList);
+	
+	var genresListDiv = document.getElementById('addGenreName');
+	var genresList = document.createElement('select');
+	
+	<%for (Entity genre : genres)
+	{%>
+	var option = document.createElement('option');
+	option.text ="<%=Genres.getName(genre)%>";
+	genresList.appendChild(option);
+	<%}%>
+	genresList.name = "genreName";
+	genresList.form = "createNewVenueForm";
+	
+	genresListDiv.appendChild(genresList);
+	
+	
+}
+
+function makeEditable(key)
+{
+	console.log("editInput"+key + " is being worked on");
+	var readOnlyStatus = document.getElementById('editInput' + key).readOnly;
+	
+	if (readOnlyStatus)
+	{
+		document.getElementById('editInput' + key).readOnly = false;
+		console.log("editInput"+key + " is editable");
+	}
+	else
+	{
+		document.getElementById('editInput' + key).readOnly = true;
+		console.log("editInput"+key + " is not editable");
+	}
+}
+
+function makeEditableAuto(type)
+{
+	if(type === 'venue')
+	{
+		document.getElementById('addEventInputVenue').readOnly = false;
+	}
+	if(type === 'genre')
+	{
+		document.getElementById('addEventInputGenre').readOnly = false;
+	}
+	
+}
 
 </script>
 
@@ -108,7 +173,6 @@ genres.push("<%=Genres.getName(genre)%>");
 
 	<table id="main">
 		<tr>
-			<th class="adminOperationsList">Admin stuffz</th>
 			<th>Event Name</th>
 			<th>Description</th>
 			<th>Address</th>
@@ -118,105 +182,129 @@ genres.push("<%=Genres.getName(genre)%>");
 			<th>Genre</th>
 		</tr>
 		<%
-			Key venueKey;
+			String venueName;
 			String genreName;
+			int i = 0;
 			for (Entity event : allEvents) {
 					String eventName = Events.getName(event);
 					String eventDescription = Events.getDescription(event);
 					String eventAddress = Events.getAddress(event);
 					int ageReq = Events.getAgeRequirement(event);
 					String hours = Events.getEventHours(event);
-					venueKey = (Key) Events.getVenueKey(event);
-					genreName = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
+					venueName = (Events.getVenueKey(event)== null?"":Events.getVenueKey(event).getName());
+					genreName = (Events.getGenreKey(event)== null?"":Events.getGenreKey(event).getName());
 					
 					
 		%>
 
 		<tr>
-			<td class="adminOperationsList">
-				<button class="editbutton" type="button"
-					onclick="editButton(<%=eventName%>,'<%=eventDescription%>',<%=eventAddress%>)">Edit</button>
-				<button class="deletebutton" type="button" onclick="deleteButton(<%=eventName%>)">Delete</button>
-			</td>
-
-			<td><div id="view<%=eventName%>"><%=eventName%></div>
-
-				<div id="edit<%=eventName%>" style="display: none">
-
-					<form id="form<%=eventName%>" action="/updateEventCommand" method="get">
-						<input type="hidden" value="<%=eventName%>" name="eventName" />
-						
-						
-						<table class="editTable">
-							<tr>
-								<td class="editTable" width=90>Name:</td>
-								<td class="editTable"><input type="text" id="editEventNameInput<%=eventName%>" class="editVenueNameInput"
-										value="<%=eventName%>" name="eventName" />
-									<div id="editVenueNameError<%=eventName%>" class="error" style="display: none">Invalid event name
-										(minimum 3 characters: letters, digits, spaces, -, ')</div></td>
-							</tr>
-							<tr>
-								<td class="editTable">Description:</td>
-								<td class="editTable"><input type="text" class="editText" value="<%=eventDescription%>"
-										name="eventDescription" /></td>
-							</tr>
-							<tr>
-								<td class="editTable">Address:</td>
-								<td class="editTable"><input type="text" class="editText" value="<%=eventAddress%>"
-										name="eventAddress" /></td>
-							</tr>
-							
-							
-						</table>
-						
-
-						
-						<button id="saveEditEventButton<%=eventName%>" type="button" onclick="saveEditEvent(<%=eventName%>)">Save</button>
-						<button type="button" onclick="cancelEditEvent(<%=eventName%>)">Cancel</button>
-					</form>
-				</div>
-
-				<div id="delete<%=eventName%>" style="display: none">
-					Do you want to delete this venue?
-					<button type="button" onclick="confirmDeleteEvent(<%=eventName%>)">Delete</button>
-					<button type="button" onclick="cancelDeleteEvent(<%=eventName%>)">Cancel</button>
-				</div></td>
-				<td><div id="view<%=eventDescription%>"><%=eventDescription%></div></td>
-			<td><div id="view<%=eventAddress%>"><%=eventAddress%></div></td>
-			<td><div id="view<%=ageReq%>"><%=ageReq%></div></td>
-			<td><div id="view<%=hours%>"><%=hours%></div></td>
-			<td><div id="view<%=venueKey%>"><%=venueKey%></div></td>
-			<td><div id="view<%=genreName %>"><%=genreName %></div>
-				
-				
+			<td><form action="/updateEventCommand" method="get">
+				<input id="editInput<%=i%>" value="<%=eventName%>" name="eventName" ondblclick="makeEditable(<%=i++ %>)" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="editInput<%=i%>" value="<%=eventDescription%>" name="eventDescription" ondblclick="makeEditable(<%=i++ %>)" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="editInput<%=i%>" value="<%=eventAddress%>" name="eventAddress" ondblclick="makeEditable(<%=i++ %>)" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="editInput<%=i%>" value="<%=ageReq%>" name="ageRequirement" ondblclick="makeEditable(<%=i++ %>)" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="editInput<%=i%>" value="<%=hours%>" name="eventHours" ondblclick="makeEditable(<%=i%>)" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="addEventInputVenue" value="<%=venueName%>" name="venueName" ondblclick="makeEditableAuto('venue')" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				<input type="hidden" value="<%=genreName%>" name="genreName"/>
+				</form>
+			</td>	
+			<td><form action="/updateEventCommand" method="get">
+				<input id="addEventInputGenre" value="<%=genreName%>" name="genreName" ondblclick="makeEditableAuto('genre')" readonly="true"/>
+				<input type="hidden" value="<%=eventName%>" name="oldEventName"/>
+				<input type="hidden" value="<%=eventDescription%>" name="eventDescription"/>
+				<input type="hidden" value="<%=eventAddress%>" name="eventAddress"/>
+				<input type="hidden" value="<%=ageReq%>" name="ageRequirement"/>
+				<input type="hidden" value="<%=hours%>" name="eventHours" />
+				<input type="hidden" value="<%=venueName%>" name="venueName"/>
+				<input type="hidden" value="<%=eventName%>" name="eventName"/>
+				</form>
+			</td>					
 		</tr>
 
 		<%
 			}
-
+%>
+</table>
+<%
 			}
 		%>
-		</table>
-
+		
+	<table>
 		<tfoot>
 			<tr>
 				<td colspan="2" class="footer">
-					<form name="addEventForm" action="/addEventCommand" method="get">
+					<form id="createNewVenueForm" name="addEventForm" action="/addEventCommand" method="get">
 						<p>New Event:</p>
 						Name: <input id="addEventInput" type="text" name="eventName" size="50" /><br>
 						Description: <input id="addEventInput" type="text" name="eventDescription" size="50" /><br>
 						Address: <input id="addEventInput" type="text" name="eventAddress" size="50" /><br>
 						Age Requirements: <input id="addEventInput" type="text" name="ageRequirement" size="50" /><br>
 						Event Hours: <input id="addEventInput" type="text" name="eventHours" size="50" /><br>
-						Venues: <input id="addEventInputVenue" type="text" name="venueName"/><br>
-						Genre: <input id="addEventInputGenre" type="text" name="genreName"/><br>
+						Venues: <div id="addVenueName" type="text" name="venueName"></div>
+						Genre: <div id="addGenreName" type="text" name="genreName"></div>
 						<input id="addEventButton" type="submit" value="Add" />
 					</form>
-					<div id="addEventError" class="error" style="display: none">Invalid event name (minimum 3 characters:
-						letters, digits, spaces, -, ')</div>
+					
 				</td>
 			</tr>
 		</tfoot>
+		</table>
 
 	
 

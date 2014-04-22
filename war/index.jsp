@@ -47,14 +47,15 @@
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
 /*
 var allVenues;
-$(document).ready(function getVenues(){
-	var gettingVenues = $.post("/getAllVenues");
-	gettingVenues.done(function(data){
-		return data;
-	})
-	gettingVenues.fail(function(data){
+$(document).ready(
+	var getVenues =	function(){
+		var gettingVenues = $.post("/getAllVenues");
+		gettingVenues.done(function(data){
+			return data;
+		});
+		gettingVenues.fail(function(data){
 		console.log("fail!");
-	})
+		});
 });
 */
 $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js", function()
@@ -83,23 +84,98 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 		};
 		};
 
-		var availableTags = new Array();
-		<%for (Entity venue : venues)
-		{%>
-		availableTags.push("<%=Venues.getName(venue)%>");
-		<%}%>
+     	var allVenuesJSON;
+     	var allEventsJSON;
+     	var allGenresJSON;
+		
+		$.post("/getAllVenues", function(data)
+        		{
+        			allVenuesJSON = data;
+        		})
+        .done(function()
+        		{
+        			$.post("/getAllEvents", function(data) {
+        				allEventsJSON = data;
+        			})
+        			.done(function(){
+        				$.post("/getAllGenres", function(data){
+        					allGenresJSON = data;
+        				})
+        				.done(function(){
+        					console.log(allVenuesJSON);
+                			console.log(allEventsJSON);
+                			console.log(allGenresJSON);
+        					allVenuesJSON = allVenuesJSON.name;
+        					allEventsJSON = allEventsJSON.name;
+        					allGenresJSON = allGenresJSON.name;
+                			console.log(allVenuesJSON);
+                			console.log(allEventsJSON);
+                			console.log(allGenresJSON);
+                			$('#the-search-box .typeahead').typeahead({
+                				hint: true,
+                				highlight: true,
+                				minLength: 1
+                				},
+                				{
+                				name: 'venues',
+                				displayKey: 'value',
+                				source: substringMatcher(allVenuesJSON),
+                				templates: {
+                					header: '<h3>Venues</h3>'
+                				}
+                				},
+                				{
+                    				name: 'events',
+                    				displayKey: 'value',
+                    				source: substringMatcher(allEventsJSON),
+                    				templates: {
+                    					header: '<h3>Events</h3>'
+                    				}
+                				},
+                    			{
+                        			name: 'genres',
+                        			displayKey: 'value',
+                        			source: substringMatcher(allGenresJSON),
+                        			templates: {
+                        				header: '<h3>Genres</h3>'
+                        			}
+                    			}).on('typeahead:selected', function (obj, datum) 
+                    			{
+                    			    console.log(obj);
+                    			    var found = false;
+                    			    for(var i = 0; !found && i<allVenuesJSON.length;i++)
+                    			    {
+                    			    	if(datum.value === allVenuesJSON[i])
+                    			    	{
+                    			    		found = true;
+                    			    		loadUrl("/venues/profile.jsp?venueName=" + datum.value);
+                    			    	}
+                    			    }
+                    			    for(var i = 0; !found &&  i<allEventsJSON.length;i++)
+                    			    {
+                    			    	if(datum.value === allEventsJSON[i])
+                    			    	{
+                    			    		found = true;
+                    			    		loadUrl("/events/profile.jsp?eventName=" + datum.value);
+                    			    	}
+                    			    }
+                    			    for(var i = 0; !found &&  i<allGenresJSON.length;i++)
+                    			    {
+                    			    	if(datum.value === allGenresJSON[i])
+                    			    	{
+                    			    		found = true;
+                    			    		console.log("Since" + datum.value + " is a genre, we need to display search results.");
+                    			    	}
+                    			    }
+                    			    
+                    			});
+                			});        					
+        				});
+        			});
+        			
+        		});
 
-		$('#the-search-box .typeahead').typeahead({
-		hint: true,
-		highlight: true,
-		minLength: 1
-		},
-		{
-		name: 'venues',
-		displayKey: 'value',
-		source: substringMatcher(availableTags)
-		});
-		});
+		
 
 		  
 		  function loadUrl(location)
@@ -118,57 +194,63 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 				var searchCommand = document.getElementById('searchBox').value;
 				var choices = ['Events', 'Genres', 'Venues', 'Age Requirement'];
 			  	var allVenues = new Array();
-			  	<%for (Entity venue : venues)
-			  	{%>
-			  	allVenues.push('<%=Venues.getName(venue)%>');
-			  	<%}%>
-			  	var index;
-			  	var numResultsFound = 0;
-			  	var redirectVenue;
-			  	var newLine = document.createElement('li');
-			  	for(index = 0; searchCommand != "" && index < allVenues.length; index++)
-			  		{
-			  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
-			  				{
-			  					newLine = document.createElement('div');
-			  					newLine.className = 'two-thirds column';
-			  					var searchResult = document.createElement('a');
+			  	$.post("/getAllVenues", function(data)
+        		{
+        			allVenues = data;
+        		})
+        		.done(function()
+        		{
+        			allVenues = allVenues.name;
+        			var index;
+    			  	var numResultsFound = 0;
+    			  	var redirectVenue;
+    			  	var newLine = document.createElement('li');
+    			  	for(index = 0; searchCommand != "" && index < allVenues.length; index++)
+    			  		{
+    			  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
+    			  				{
+    			  					newLine = document.createElement('div');
+    			  					newLine.className = 'two-thirds column';
+    			  					var searchResult = document.createElement('a');
 
-			  					searchResult.appendChild(document.createTextNode(allVenues[index]));
-			  					searchResult.title = allVenues[index] + " profile";
-			  					searchResult.href = "/venues/profile.jsp?venueName=" + allVenues[index];
-			  					newLine.appendChild(searchResult);
-			  					searchDiv.appendChild(newLine);
-			  					redirectVenue = searchResult.href;
-			  					numResultsFound++; 					
-
-
-			  				}
-			  		}
-			  	if (numResultsFound === 1)
-			  		{
-			  			loadUrl(redirectVenue);
-			  		}
-			  	else 
-			  		{
-			  			if (numResultsFound > 1)
-			  				{ 
-			  					$('.typeahead').typeahead('close');
-			  					$('#search-div').removeAttr('disabled');
-			  				}
-			  			else
-			  				if(numResultsFound === 0)
-			  					searchDiv.appendChild(document.createTextNode("No venues found"));
-
-			  		}
+    			  					searchResult.appendChild(document.createTextNode(allVenues[index]));
+    			  					searchResult.title = allVenues[index] + " profile";
+    			  					searchResult.href = "/venues/profile.jsp?venueName=" + allVenues[index];
+    			  					newLine.appendChild(searchResult);
+    			  					searchDiv.appendChild(newLine);
+    			  					redirectVenue = searchResult.href;
+    			  					numResultsFound++; 					
 
 
+    			  				}
+    			  		}
+    			  	if (numResultsFound === 1)
+    			  		{
+    			  			loadUrl(redirectVenue);
+    			  		}
+    			  	else 
+    			  		{
+    			  			if (numResultsFound > 1)
+    			  				{ 
+    			  					$('.typeahead').typeahead('close');
+    			  					$('#search-div').removeAttr('disabled');
+    			  				}
+    			  			else
+    			  				if(numResultsFound === 0)
+    			  					searchDiv.appendChild(document.createTextNode("No venues found"));
 
-			  }
+    			  		}
+
+
+
+    			  
+        		});
+		  }
+			  	
 		  }
 		  
 
-
+		 
 
 </script>
 

@@ -1,5 +1,6 @@
 package nightlifebuddy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +16,8 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
  * GAE ENTITY UTIL CLASS: "Genre" <br>
@@ -282,6 +285,29 @@ public class Genres
             Query query = new Query(ENTITY_KIND);
             List<Entity> result = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(limit));
             return result;
+    }
+    
+    public static JSONObject getFirstGenresJSON()
+    {
+    	List<Entity> firstGenres = getFirstGenres(20);
+    	JSONObject allGenres = new JSONObject();
+    	try {
+			allGenres.put("name", getAllGenreNames(firstGenres));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return allGenres;
+    }
+    
+    public static List<String> getAllGenreNames(List<Entity> firstGenres)
+    {
+    	List<String> genreNames = new ArrayList<String>();
+    	for (int i = 0; i < firstGenres.size(); i++)
+    	{
+    		genreNames.add((String)firstGenres.get(i).getProperty(NAME_PROPERTY));
+    	}
+    	return genreNames;
     }
     
     

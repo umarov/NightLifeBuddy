@@ -25,12 +25,21 @@ Entity event;
 //venue = Venues.getVenue(key);
 event = Events.getEventWithName(name);
 // List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
-String eventName = Events.getName(event);
-String eventDescription = Events.getDescription(event);
-String eventAddress = (String) Venues.getVenue(Events.getVenueKey(event)).getProperty("address");
-int ageReq = Events.getAgeRequirement(event);
-String hours = Events.getEventHours(event);
-String genre = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
+String eventName = "No event found";
+String eventDescription = "No event found";
+String eventAddress = "No event found";
+int ageReq = 0;
+String hours = "No event found";
+String genre = "No event found";
+if(event!= null)
+{
+	eventName = name;
+	eventDescription = Events.getDescription(event);
+	eventAddress = (String) Venues.getAddress(Venues.getVenueWithName(Events.getVenueKey(event).getName()));
+	ageReq = Events.getAgeRequirement(event);
+	hours = Events.getEventHours(event);
+	genre = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
+}
 
 String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" + eventAddress +"&sensor=false";
 

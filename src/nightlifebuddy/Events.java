@@ -1,5 +1,6 @@
 package nightlifebuddy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,6 +17,8 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
 
 /**
  * GAE ENTITY UTIL CLASS: "Events" <br>
@@ -220,8 +223,8 @@ public class Events
 	public static Entity createEvent(String name, String description, String address, String venueName, int age, String hours, String genreName) 
 	{
         Entity event = null;
-        Entity venue = null;
-        Entity genre = null;
+        //Entity venue = null;
+        //Entity genre = null;
         
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         TransactionOptions options = TransactionOptions.Builder.withXG(true);
@@ -235,15 +238,15 @@ public class Events
                 }
                 
                 event = new Entity(ENTITY_KIND);
-                venue = Venues.getVenueWithName(venueName);
-                genre = Genres.getGenreWithName(genreName);
+                //venue = Venues.getVenueWithName(venueName);
+                //genre = Genres.getGenreWithName(genreName);
                 event.setProperty(NAME_PROPERTY, name);
                 event.setProperty(DESCRIPTION_PROPERTY, description);
                 event.setProperty(ADDRESS_PROPERTY, address);
                 event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
-                event.setProperty(VENUE_PROPERTY, venue.getKey());
-                event.setProperty(GENRE_PROPERTY, genre.getKey());
+                event.setProperty(VENUE_PROPERTY, Venues.getKey(venueName));
+                event.setProperty(GENRE_PROPERTY, Genres.getKey(genreName));
                 
                 datastore.put(event);           
                 txn.commit();
@@ -354,26 +357,31 @@ public class Events
      * @param address The address of the user as a String.
      * @return true if succeed and false otherwise
      */
-	public static boolean updateEventCommand(String name, String description, String address, String venueName, int age, String hours, String genreName) 
+	public static boolean updateEventCommand(String oldName, String name, String description, String address, String venueName, int age, String hours, String genreName) 
 	{
         Entity event = null;
-        Entity venue = null;
-        Entity genre = null;
+        
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        TransactionOptions options = TransactionOptions.Builder.withXG(true);
+        Transaction txn = datastore.beginTransaction(options);
         try {
-        		event = getEvent(name);
-        		venue = Venues.getVenueWithName(venueName);
-        		genre = Genres.getGenre(genreName);
+        		event = getEventWithName(oldName);
         		event.setProperty(NAME_PROPERTY, name);
         		event.setProperty(DESCRIPTION_PROPERTY, description);
         		event.setProperty(ADDRESS_PROPERTY, address);
-        		event.setProperty(VENUE_PROPERTY, venue.getKey());
+        		event.setProperty(VENUE_PROPERTY, Venues.getKey(venueName));
         		event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
-                event.setProperty(GENRE_PROPERTY, genre.getKey());
-                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                event.setProperty(GENRE_PROPERTY, Genres.getKey(genreName));
+                datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(event);
+                txn.commit();
         } catch (Exception e) {
                 return false;
+        } finally {
+            if (txn.isActive()) {
+                txn.rollback();
+            }
         }
         return true;
 	}
@@ -433,6 +441,29 @@ public class Events
     public static List<Entity> getResults()
     {
     	return result;
+    }
+    
+    public static JSONObject getFirstEventsJSON()
+    {
+    	List<Entity> firstEvents = getFirstEvents(20);
+    	JSONObject allEvents = new JSONObject();
+    	try {
+			allEvents.put("name", getAllEventNames(firstEvents));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return allEvents;
+    }
+    
+    public static List<String> getAllEventNames(List<Entity> firstEvents)
+    {
+    	List<String> eventNames = new ArrayList<String>();
+    	for (int i = 0; i < firstEvents.size(); i++)
+    	{
+    		eventNames.add((String)firstEvents.get(i).getProperty(NAME_PROPERTY));
+    	}
+    	return eventNames;
     }
 
     /**

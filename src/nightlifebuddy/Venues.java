@@ -104,8 +104,12 @@ public class Venues
      */
 	public static String getName(Entity venue) 
 	{
-        Object name = venue.getProperty(NAME_PROPERTY);
-        if (name == null) name = "";
+        Object name = "";
+        		
+        if (venue == null) 
+        	name = "";
+        else
+        	name = venue.getProperty(NAME_PROPERTY);
         return (String) name;
 	}
 	

@@ -83,7 +83,7 @@ String hours = Venues.getVenueHours(venue);
 		</div>
 		<%if (eventsInThisVenue.isEmpty()) { %>
 		<div class="six columns offset-by-two" id="sidebar">
-			<h4>There are no events at the moment...</h4>
+			<h4>No Events scheduled...</h4>
 			<hr>
 			<h5>Come back later</h5>		
 		</div>
