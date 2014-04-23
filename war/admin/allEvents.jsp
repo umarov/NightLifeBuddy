@@ -192,7 +192,7 @@ function makeEditableAuto(type)
 					int ageReq = Events.getAgeRequirement(event);
 					String hours = Events.getEventHours(event);
 					venueName = (Events.getVenueKey(event)== null?"":Events.getVenueKey(event).getName());
-					genreName = (Events.getGenreKey(event)== null?"":Events.getGenreKey(event).getName());
+					genreName = Events.getGenreName(event);
 					
 					
 		%>

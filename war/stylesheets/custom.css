@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Libre+Baskerville);
+@import url(http://fonts.googleapis.com/css?family=Codystar);
 body{
 	background: none;
 }
@@ -37,7 +37,7 @@ body{
 	padding-top: 0.3em;
 	font-size: 7.5em;
 	line-height: 1em;
-	font-family: 'Libre Baskerville', serif;
+	font-family: 'Codystar', serif;
 	text-align: center;
 }
 #header h1 a{
@@ -141,7 +141,8 @@ h2.searchTitle{
 .mainSearch{
 	position: relative;
 	diplay: inline;
-	height: 30px;
+	height: 50px;
+	
 }
 .mainSearch input{
 	display: inline;

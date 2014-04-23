@@ -35,10 +35,10 @@ if(event!= null)
 {
 	eventName = name;
 	eventDescription = Events.getDescription(event);
-	eventAddress = (String) Venues.getAddress(Venues.getVenueWithName(Events.getVenueKey(event).getName()));
+	eventAddress = (String) Venues.getAddress(Venues.getVenueWithName(Events.getVenueName(event)));
 	ageReq = Events.getAgeRequirement(event);
 	hours = Events.getEventHours(event);
-	genre = Genres.getName(Genres.getGenreByKey(Events.getGenreKey(event)));
+	genre = Events.getGenreName(event);
 }
 
 String url = "http://maps.googleapis.com/maps/api/geocode/json?address=" + eventAddress +"&sensor=false";

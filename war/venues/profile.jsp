@@ -24,7 +24,7 @@ Entity venue;
 
 //venue = Venues.getVenue(key);
 venue = Venues.getVenueWithName(name);
-List<Entity> eventsInThisVenue = Events.searchVenues(venue.getKey());
+List<Entity> eventsInThisVenue = Events.searchVenues(name);
 String venueName = Venues.getName(venue);
 String venueDescription = Venues.getDescription(venue);
 String venueAddress = Venues.getAddress(venue);

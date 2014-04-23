@@ -42,6 +42,7 @@
   <script src="js/typeahead.bundle.min.js"></script>
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/jquery.videoBG.js"></script>
+  <script src="js/typeface-0.15.js"></script>
   
   <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
@@ -121,7 +122,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                 				displayKey: 'value',
                 				source: substringMatcher(allVenuesJSON),
                 				templates: {
-                					header: '<h3>Venues</h3>'
+                					header: '<strong><u>Venues</u></strong>'
                 				}
                 				},
                 				{
@@ -129,7 +130,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                     				displayKey: 'value',
                     				source: substringMatcher(allEventsJSON),
                     				templates: {
-                    					header: '<h3>Events</h3>'
+                    					header: '<strong><u>Events</u></strong>'
                     				}
                 				},
                     			{
@@ -137,7 +138,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                         			displayKey: 'value',
                         			source: substringMatcher(allGenresJSON),
                         			templates: {
-                        				header: '<h3>Genres</h3>'
+                        				header: '<strong><u>Genres</u></strong>'
                         			}
                     			}).on('typeahead:selected', function (obj, datum) 
                     			{
@@ -164,7 +165,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                     			    	if(datum.value === allGenresJSON[i])
                     			    	{
                     			    		found = true;
-                    			    		console.log("Since" + datum.value + " is a genre, we need to display search results.");
+                    			    		document.getElementById('mainSearchButton').click();
                     			    	}
                     			    }
                     			    
@@ -184,6 +185,8 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 		  }
 		  window.onload = function()
 		  {
+			  
+			  
 			  var searchDiv = document.getElementById('search-div');
 			  document.getElementById('mainSearchButton').onclick = function search()
 			  {
@@ -192,41 +195,53 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 				$('#search-div').attr('disabled', true);
 
 				var searchCommand = document.getElementById('searchBox').value;
-				var choices = ['Events', 'Genres', 'Venues', 'Age Requirement'];
 			  	var allVenues = new Array();
-			  	$.post("/getAllVenues", function(data)
+			  	$.get("/searchEventsWithGenre?genreName=" + searchCommand, function(data)
         		{
-        			allVenues = data;
+        			allEvents = data;
+        			console.log(data);
         		})
         		.done(function()
         		{
-        			allVenues = allVenues.name;
+        			//allEvents = allEvents.propertyMap;
+        			console.log(allEvents);
         			var index;
     			  	var numResultsFound = 0;
-    			  	var redirectVenue;
+    			  	var redirectEvent;
     			  	var newLine = document.createElement('li');
-    			  	for(index = 0; searchCommand != "" && index < allVenues.length; index++)
+    			  	if(allEvents instanceof Array)
+    			  		for(index = 0; index < allEvents.length; index++)
     			  		{
-    			  			if (allVenues[index].toLowerCase().match(searchCommand.toLowerCase()) != null)
-    			  				{
-    			  					newLine = document.createElement('div');
-    			  					newLine.className = 'two-thirds column';
-    			  					var searchResult = document.createElement('a');
+    			  			newLine = document.createElement('div');
+    	  					newLine.className = 'two-thirds column';
+    	  					var searchResult = document.createElement('a');
 
-    			  					searchResult.appendChild(document.createTextNode(allVenues[index]));
-    			  					searchResult.title = allVenues[index] + " profile";
-    			  					searchResult.href = "/venues/profile.jsp?venueName=" + allVenues[index];
-    			  					newLine.appendChild(searchResult);
-    			  					searchDiv.appendChild(newLine);
-    			  					redirectVenue = searchResult.href;
-    			  					numResultsFound++; 					
+    	  					searchResult.appendChild(document.createTextNode(allEvents[index].propertyMap.name));
+    	  					searchResult.title = allEvents[index].propertyMap.name + " profile";
+    	  					searchResult.href = "/events/profile.jsp?eventName=" + allEvents[index].propertyMap.name;
+    	  					newLine.appendChild(searchResult);
+    	  					searchDiv.appendChild(newLine);
+    	  					redirectEvent = searchResult.href;
+    	  					numResultsFound++; 		
+    			  		} 
+    			  	else
+    			  	{
+    			  		newLine = document.createElement('div');
+	  					newLine.className = 'two-thirds column';
+	  					var searchResult = document.createElement('a');
 
-
-    			  				}
-    			  		}
+	  					searchResult.appendChild(document.createTextNode(allEvents.propertyMap.name));
+	  					searchResult.title = allEvents.propertyMap.name + " profile";
+	  					searchResult.href = "/events/profile.jsp?eventName=" + allEvents.propertyMap.name;
+	  					newLine.appendChild(searchResult);
+	  					searchDiv.appendChild(newLine);
+	  					redirectEvent = searchResult.href;
+	  					numResultsFound++; 			
+    			  	}
+    		
     			  	if (numResultsFound === 1)
     			  		{
-    			  			loadUrl(redirectVenue);
+    			  			loadUrl(redirectEvent);
     			  		}
     			  	else 
     			  		{
@@ -237,7 +252,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
     			  				}
     			  			else
     			  				if(numResultsFound === 0)
-    			  					searchDiv.appendChild(document.createTextNode("No venues found"));
+    			  					searchDiv.appendChild(document.createTextNode("No Events found"));
 
     			  		}
 
@@ -262,7 +277,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
       
       	<div class="row">
 		   <div class="sixteen columns">
-		      <h2 class="searchTitle"> Start the night off right. Searching by Venue: </h2>
+		      <h2 id="searchTitle" class="searchTitle"> Start the night off right. Searching by Venue: </h2>
 		   </div>
 		</div>
 		<div class="row">

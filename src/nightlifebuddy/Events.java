@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import com.google.gson.Gson;
 
 /**
  * GAE ENTITY UTIL CLASS: "Events" <br>
@@ -207,6 +208,7 @@ public class Events
 
     public static final String VENUE_PROPERTY = "venue";
     
+    public static final String VENUE_NAME_PROPERTY = "venueName";
     
 	
 	//
@@ -246,7 +248,9 @@ public class Events
                 event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
                 event.setProperty(VENUE_PROPERTY, Venues.getKey(venueName));
+                event.setProperty(VENUE_NAME_PROPERTY, venueName);
                 event.setProperty(GENRE_PROPERTY, Genres.getKey(genreName));
+                event.setProperty(GENRE_NAME_PROPERTY, genreName);
                 
                 datastore.put(event);           
                 txn.commit();
@@ -270,11 +274,33 @@ public class Events
 		return venueKey;
 	}
 	
+	public static String getVenueName(Entity event)
+	{
+		Object name = event.getProperty(VENUE_NAME_PROPERTY);
+		if (name == null)
+		{
+			name = "No venue";
+		}
+		return (String) name;
+	}
+	
 	//
 	// GENRE
 	//
 	
 	public static final String GENRE_PROPERTY = "genre";
+	
+	public static final String GENRE_NAME_PROPERTY = "genreName";
+	
+	public static String getGenreName(Entity event)
+	{
+		Object name = event.getProperty(GENRE_NAME_PROPERTY);
+		if (name == null)
+		{
+			name = "No genre";
+		}
+		return (String) name;
+	}
 	
 	
 	public static Key getGenreKey(Entity event)
@@ -369,10 +395,12 @@ public class Events
         		event.setProperty(NAME_PROPERTY, name);
         		event.setProperty(DESCRIPTION_PROPERTY, description);
         		event.setProperty(ADDRESS_PROPERTY, address);
-        		event.setProperty(VENUE_PROPERTY, Venues.getKey(venueName));
         		event.setProperty(AGE_REQ_PROPERTY, age);
                 event.setProperty(EVENT_HOURS_PROPERTY, hours);
+                event.setProperty(VENUE_PROPERTY, Venues.getKey(venueName));
+                event.setProperty(VENUE_NAME_PROPERTY, venueName);
                 event.setProperty(GENRE_PROPERTY, Genres.getKey(genreName));
+                event.setProperty(GENRE_NAME_PROPERTY, genreName);
                 datastore = DatastoreServiceFactory.getDatastoreService();
                 datastore.put(event);
                 txn.commit();
@@ -474,12 +502,12 @@ public class Events
      * @return 
      * @return nothing. 
      */
-	public static List<Entity> searchVenues(Key search) 
+	public static List<Entity> searchVenues(String search) 
 	{
 		List<Entity> result = null;
         try {
                 
-                Filter hasSearch = new FilterPredicate(VENUE_PROPERTY,
+                Filter hasSearch = new FilterPredicate(VENUE_NAME_PROPERTY,
                                                       FilterOperator.EQUAL,
                                                       search);
                 Query query = new Query(ENTITY_KIND);
@@ -493,6 +521,31 @@ public class Events
                 // TODO log the error
         }
         return result;
+		
+	}
+	
+	public static String searchGenres(String search) 
+	{
+		List<Entity> result = null;
+		String json = "herro";
+        try {
+                
+                Filter hasSearch = new FilterPredicate(GENRE_NAME_PROPERTY,
+                                                      FilterOperator.EQUAL,
+                                                      search);
+                Query query = new Query("Event");
+                query.setFilter(hasSearch);
+                DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                result = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(30));
+                
+                Gson gson = new Gson();
+                json = gson.toJson(result);
+                System.out.println(json);
+                
+        } catch (Exception e) {
+        	
+        }
+        return json;
 		
 	}
 

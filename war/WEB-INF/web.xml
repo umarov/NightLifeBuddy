@@ -173,6 +173,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet-mapping>
 	
 	<servlet>
+	    <servlet-name>EventsWithGenreServletJSON</servlet-name>
+	    <servlet-class>nightlifebuddy.EventsWithGenreServletJSON</servlet-class>	    
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>EventsWithGenreServletJSON</servlet-name>
+	    <url-pattern>/searchEventsWithGenre</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 	    <servlet-name>GetAllGenresServlet</servlet-name>
 	    <servlet-class>nightlifebuddy.GetAllGenresServletJSON</servlet-class>	    
 	</servlet>
