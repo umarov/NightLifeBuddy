@@ -19,12 +19,27 @@ body{
 
 /*------------- typeahead styles ------------*/
 .tt-dropdown-menu{
-	background: #efefef;
+	background: #fff;
 	top: 65% !important;
 	width: 98%;
 	border: 1px solid rgb(204, 204, 204);
 	padding-left: 4px;
 }
+.tt-suggestion{
+	height: 2em;
+}
+.tt-dataset-venues{
+	color: blue;
+	margin: 1em 0;
+}
+.tt-dataset-events{
+	color: #AA00A2;
+	margin: 1em 0;
+}
+.tt-dataset-genres{
+	color: green;
+	margin: 1em 0;
+}*/
 
 /*---------------Header----------------*/
 #header{
@@ -33,17 +48,47 @@ body{
 	/*background: top center url('../img/header.jpg') no-repeat;*/
 	background-size: 100% auto;
 }
-#header h1{
-	padding-top: 0.3em;
-	font-size: 7.5em;
-	line-height: 1em;
-	font-family: 'Codystar', serif;
-	text-align: center;
+@media only screen and (max-width: 40em) { 
+	#header h1{
+		padding-top: 0.3em;
+		font-size: 3em;
+		line-height: 1em;
+		font-family: 'Codystar', serif;
+		text-align: center;
+	}
+	#header h1 a{
+		color: #fff;
+		text-shadow: 0px 1px 11px rgba(0, 0, 0, 1);
+		text-decoration: none;
+	}
 }
-#header h1 a{
-	color: #fff;
-	text-shadow: 0px 1px 11px rgba(0, 0, 0, 1);
-	text-decoration: none;
+@media only screen and (min-width: 40.063em) and (max-width: 64em) {
+	#header h1{
+		padding-top: 0.3em;
+		font-size: 5em;
+		line-height: 1em;
+		font-family: 'Codystar', serif;
+		text-align: center;
+	}
+	#header h1 a{
+		color: #fff;
+		text-shadow: 0px 1px 11px rgba(0, 0, 0, 1);
+		text-decoration: none;
+	}
+}
+@media only screen and (min-width: 64.063em) { 
+	#header h1{
+		padding-top: 0.3em;
+		font-size: 7.5em;
+		line-height: 1em;
+		font-family: 'Codystar', serif;
+		text-align: center;
+	}
+	#header h1 a{
+		color: #fff;
+		text-shadow: 0px 1px 11px rgba(0, 0, 0, 1);
+		text-decoration: none;
+	}
 }
 ul.nav {
 	position: absolute;
@@ -214,4 +259,7 @@ div.results .right{
 
 #mainSearchButton {    
         visibility: hidden;
+}
+#the-search-box input{
+	width: 360px;
 }

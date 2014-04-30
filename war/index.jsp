@@ -120,7 +120,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                 				displayKey: 'value',
                 				source: substringMatcher(allVenuesJSON),
                 				templates: {
-                					header: '<strong><u>Venues</u></strong>'
+                					header: '<span style="color:blue;"><strong><u>Venues</u></strong></span>'
                 				}
                 				},
                 				{
@@ -128,7 +128,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                     				displayKey: 'value',
                     				source: substringMatcher(allEventsJSON),
                     				templates: {
-                    					header: '<strong><u>Events</u></strong>'
+                    					header: '<span style="color:red;"><strong><u>Events</u></strong></span>'
                     				}
                 				},
                     			{
@@ -136,7 +136,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
                         			displayKey: 'value',
                         			source: substringMatcher(allGenresJSON),
                         			templates: {
-                        				header: '<strong><u>Genres</u></strong>'
+                        				header: '<span style="color:yellow;"><strong><u>Genres</u></strong></span>'
                         			}
                     			}).on('typeahead:selected', function (obj, datum) 
                     			{
