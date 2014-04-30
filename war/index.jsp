@@ -104,9 +104,6 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
         					allGenresJSON = data;
         				})
         				.done(function(){
-        					console.log(allVenuesJSON);
-                			console.log(allEventsJSON);
-                			console.log(allGenresJSON);
         					allVenuesJSON = allVenuesJSON.name;
         					allEventsJSON = allEventsJSON.name;
         					allGenresJSON = allGenresJSON.name;
@@ -200,17 +197,14 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 			  	$.get("/searchEventsWithGenre?genreName=" + searchCommand, function(data)
         		{
         			allEvents = data;
-        			console.log(data);
         		})
         		.done(function()
         		{
-        			//allEvents = allEvents.propertyMap;
-        			console.log(allEvents);
         			var index;
     			  	var numResultsFound = 0;
     			  	var redirectEvent;
     			  	var newLine = document.createElement('li');
-    			  	if(allEvents instanceof Array)
+    			  	if(allEvents.length > 1)
     			  		for(index = 0; index < allEvents.length; index++)
     			  		{
     			  			newLine = document.createElement('div');
@@ -227,16 +221,8 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
     			  		} 
     			  	else
     			  	{
-    			  		newLine = document.createElement('div');
-	  					newLine.className = 'two-thirds column';
-	  					var searchResult = document.createElement('a');
-
-	  					searchResult.appendChild(document.createTextNode(allEvents.propertyMap.name));
-	  					searchResult.title = allEvents.propertyMap.name + " profile";
-	  					searchResult.href = "/events/profile.jsp?eventName=" + allEvents.propertyMap.name;
-	  					newLine.appendChild(searchResult);
-	  					searchDiv.appendChild(newLine);
-	  					redirectEvent = searchResult.href;
+    			  		var eventName = allEvents[0].propertyMap.name;
+    			  		var redirectEvent = "/events/profile.jsp?eventName=" + eventName;
 	  					numResultsFound++; 			
     			  	}
     		
@@ -285,7 +271,7 @@ $.getScript("//twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.j
 			
 		   <div class="eleven columns offset-by-five">
 		   		<div id="the-search-box" class="mainSearch left">
-		   				<input onkeydown="if (event.keyCode == 13) { document.getElementById('mainSearchButton').click(); return false; }" id="searchBox"  class="typeahead" type="text" placeholder="For example, 'Echostage'" autocomplete="off" name="search">
+		   				<input onkeydown="if (event.keyCode == 13) { document.getElementById('mainSearchButton').click(); return false; }" id="searchBox"  class="typeahead" type="text" placeholder="For example, 'Echostage'" autocomplete="off" name="search"><br/>
 				    	<input id="mainSearchButton" type="submit" value="search" />
 				</div> 
 		      	

@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Search for a venue.
+ * Search for an event with the genreName.
  */
 @SuppressWarnings("serial")
 public class EventsWithGenreServletJSON extends HttpServlet {
@@ -34,8 +34,7 @@ public class EventsWithGenreServletJSON extends HttpServlet {
         }
         
         protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            
-        	System.out.println(req.getParameter("genreName"));
+           
         	String search = (String) req.getParameter("genreName");
         	
             resp.setContentType("application/json");

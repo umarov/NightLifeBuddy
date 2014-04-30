@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Update the admin profile.
+ * Update the event entity.
  */
 @SuppressWarnings("serial")
 public class UpdateEventServlet extends HttpServlet {

@@ -211,3 +211,7 @@ div.results .right{
 #searchDiv span.results .columns{
 	text-align: left;
 }
+
+#mainSearchButton {    
+        visibility: hidden;
+}
