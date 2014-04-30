@@ -28,6 +28,6 @@ public class UpdateEventServlet extends HttpServlet {
                 		req.getParameter("eventAddress"), req.getParameter("venueName"), Integer.parseInt(req.getParameter("ageRequirement")), 
                 		req.getParameter("eventHours"), req.getParameter("genreName")));
 
-                //resp.sendRedirect("/admin/allEvents.jsp");
+                resp.sendRedirect("/admin/allEvents.jsp");
         }
 }

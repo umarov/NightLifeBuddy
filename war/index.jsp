@@ -43,6 +43,7 @@
   <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
   <script src="js/jquery.videoBG.js"></script>
   <script src="js/typeface-0.15.js"></script>
+  <script src="js/fittext.js"></script>
   
   <script>
 <%List<Entity> venues = Venues.getFirstVenues(20);%>
