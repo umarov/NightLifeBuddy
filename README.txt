@@ -9,6 +9,8 @@ If there is only one event in that specific genre, then you wil be directly take
 
 The actual app runs on Google App Engine. You can check it out here http://nightlifebuddy.appspot.com
 
+What we use: Java, JavaScript, HTML, CSS, JSON, Google App Engine Datastore.
+
 Enjoy!
 
 
